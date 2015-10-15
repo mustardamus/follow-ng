@@ -58,7 +58,11 @@ module.exports =
       vm.$parent.$data.searchTerms = outArr
 
     removeSearchTermRequest: (screen_name, term) ->
-      console.log 'request remove', term, 'from', screen_name
+      $.ajax
+        url:      '/terms'
+        type:     'DELETE'
+        dataType: 'json'
+        data: { screen_name: screen_name, term: term }
 
     onSearchTermAdd: (e) ->
       vm   = e.targetVM
@@ -70,4 +74,8 @@ module.exports =
         vm.$data.searchTerm = ''
 
     addSearchTermRequest: (screen_name, term) ->
-      console.log 'request add', term, 'to', screen_name
+      $.ajax
+        url:      '/terms'
+        type:     'POST'
+        dataType: 'json'
+        data: { screen_name: screen_name, term: term }
