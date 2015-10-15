@@ -5,14 +5,18 @@ module.exports =
   components: {}
 
   data: ->
-    accounts: []
+    accounts: @$root.$data.accounts
 
   ready: ->
-    if @$root.$data.loggedIn
+    if @$root.$data.loggedIn and @$data.accounts.length is 0
       @accountsRequest()
 
     @$root.$watch 'loggedIn', (loggedIn) =>
-      @accountsRequest() if(loggedIn)
+      if loggedIn and @$data.accounts.length is 0
+        @accountsRequest()
+
+    @$root.$watch 'accounts', (accounts) =>
+      @$data.accounts = accounts
 
   methods:
     onAddAccountClick: ->
@@ -40,7 +44,7 @@ module.exports =
         error:    @onAccountsError
 
     onAccountsSuccess: (accountsArr) ->
-      @$data.accounts = accountsArr
+      @$root.$data.accounts = accountsArr
 
     onAccountsError: (res) ->
       console.log 'get accounts error', res
