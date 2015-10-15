@@ -1,6 +1,9 @@
 # smartfollow
 
-Build your Twitter audience.
+## Resources
+
+- [node-twitter-api](https://github.com/reneraab/node-twitter-api)
+- [twit](https://github.com/ttezel/twit)
 
 ## Application Stack
 

@@ -7,6 +7,7 @@ module.exports =
     'page-login'   : require('../page-login')
     'page-user'    : require('../page-user')
     'page-register': require('../page-register')
+    'page-accounts': require('../page-accounts')
 
   data: ->
     currentPage: ''
