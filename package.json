@@ -1,0 +1,55 @@
+{
+  "name": "smartfollow",
+  "version": "0.1.0",
+  "description": "Build your Twitter audience.",
+  "author": "Sebastian Senf (me@akrasia.me)",
+  "license": "MIT",
+  "main": "client/index.coffee",
+  "scripts": {
+    "start": "forever -c coffee -f -m 3 -w --watch --watchDirectory=\"server\" server/index.coffee",
+    "stop": "",
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "devDependencies": {
+    "browser-sync": "^2.9.11",
+    "browserify": "^11.2.0",
+    "cheerio": "^0.19.0",
+    "chokidar": "^1.2.0",
+    "coffeeify": "^1.1.0",
+    "deamdify": "^0.1.1",
+    "debowerify": "^1.3.1",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^3.0.2",
+    "gulp-bump": "^1.0.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-csso": "^1.0.0",
+    "gulp-imagemin": "^2.3.0",
+    "gulp-spawn-mocha": "^2.2.1",
+    "gulp-stylus": "^2.1.0",
+    "gulp-uglify": "^1.4.2",
+    "gulp-util": "^3.0.6",
+    "html2js-browserify": "^1.1.0",
+    "should": "^7.1.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.4.0"
+  },
+  "dependencies": {
+    "bcrypt": "^0.8.5",
+    "body-parser": "^1.14.1",
+    "director": "^1.2.8",
+    "express": "^4.13.3",
+    "fastclick": "^1.0.6",
+    "jquery": "^2.1.4",
+    "jsonwebtoken": "^5.4.0",
+    "lodash": "^3.10.1",
+    "mongoose": "^4.1.11",
+    "socket.io": "^1.3.7",
+    "socket.io-client": "^1.3.7",
+    "vue": "^0.12.16"
+  }
+}

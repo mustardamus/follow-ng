@@ -1,0 +1,20 @@
+{
+  "name": "smartfollow",
+  "version": "0.1.0",
+  "authors": [
+    "Sebastian Senf (me@akrasia.me)"
+  ],
+  "description": "Build your Twitter audience.",
+  "main": "client/index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "semantic": "semantic-ui#~2.1.4"
+  }
+}
