@@ -1,3 +1,53 @@
 <div class="page-accounts">
   <a v-on="click:onAddAccountClick" class="ui button" id="add">Add Twitter Account</a>
+
+  <div class="ui cards">
+    <div class="card" v-repeat="accounts">
+      <div class="content">
+        <div class="right floated meta">
+          {{statuses_count}} Tweets
+        </div>
+        <img class="ui avatar image" v-attr="src:profile_image_url">
+        <a href="https://twitter.com/{{screen_name}}" target="_blank">
+          @{{screen_name}}
+        </a>
+      </div>
+
+      <div class="extra content">
+        <span class="right floated">
+          <i class="users icon"></i> {{friends_count}} Friends
+        </span>
+
+        <i class="users icon"></i> {{followers_count}} Followers
+      </div>
+
+      <div class="content">
+        <h4 v-if="searchTerms.length === 0">No Search Terms yet.</h4>
+        <h4 v-if="searchTerms.length !== 0">Search Terms</h4>
+
+        <div v-if="searchTerms.length !== 0" class="ui divided items">
+          <div v-repeat="searchTerms" class="item">
+            <div class="ui left floated icon tiny">
+              <a v-on="click:onRemoveSearchTermClick" class="ui red">
+                <i class="remove circle outline icon"></i>
+              </a>
+            </div>
+
+            <div class="content">
+              {{$value}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="extra content">
+        <div class="ui transparent left icon input">
+          <i class="add circle icon"></i>
+          <input type="text" placeholder="Add Search Term..." v-on="keyup:onSearchTermAdd | key 'enter'" v-model="searchTerm">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
