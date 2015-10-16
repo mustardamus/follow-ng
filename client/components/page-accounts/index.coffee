@@ -2,8 +2,6 @@ module.exports =
   replace:  true
   template: require('./template')
 
-  components: {}
-
   data: ->
     accounts: @$root.$data.accounts
 
@@ -55,11 +53,11 @@ module.exports =
       parentVm = vm.$parent
       outArr = []
 
-      for searchTerm in parentVm.$data.searchTerms
+      for searchTerm in parentVm.$data.terms
         outArr.push(searchTerm) if(searchTerm isnt term)
 
       @removeSearchTermRequest vm.$parent.$data.screen_name, term
-      vm.$parent.$data.searchTerms = outArr
+      vm.$parent.$data.terms = outArr
 
     removeSearchTermRequest: (screen_name, term) ->
       $.ajax
@@ -70,12 +68,12 @@ module.exports =
 
     onSearchTermAdd: (e) ->
       vm   = e.targetVM
-      term = $.trim(vm.$data.searchTerm)
+      term = $.trim(vm.$data.term)
 
       if term.length isnt 0
         @addSearchTermRequest vm.$data.screen_name, term
-        vm.$data.searchTerms.push term
-        vm.$data.searchTerm = ''
+        vm.$data.terms.push term
+        vm.$data.term = ''
 
     addSearchTermRequest: (screen_name, term) ->
       $.ajax

@@ -22,11 +22,11 @@
       </div>
 
       <div class="content">
-        <h4 v-if="searchTerms.length === 0">No Search Terms yet.</h4>
-        <h4 v-if="searchTerms.length !== 0">Search Terms</h4>
+        <h4 v-if="terms.length === 0">No Search Terms yet.</h4>
+        <h4 v-if="terms.length !== 0">Search Terms</h4>
 
-        <div v-if="searchTerms.length !== 0" class="ui divided items">
-          <div v-repeat="searchTerms" class="item">
+        <div v-if="terms.length !== 0" class="ui divided items">
+          <div v-repeat="terms" class="item">
             <div class="ui left floated icon tiny">
               <a v-on="click:onRemoveSearchTermClick" class="ui red">
                 <i class="remove circle outline icon"></i>
@@ -43,7 +43,7 @@
       <div class="extra content">
         <div class="ui transparent left icon input">
           <i class="add circle icon"></i>
-          <input type="text" placeholder="Add Search Term..." v-on="keyup:onSearchTermAdd | key 'enter'" v-model="searchTerm">
+          <input type="text" placeholder="Add Search Term..." v-on="keyup:onSearchTermAdd | key 'enter'" v-model="term">
         </div>
       </div>
 
