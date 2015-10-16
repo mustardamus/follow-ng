@@ -20,47 +20,43 @@ module.exports = (config, helpers, io, models) ->
       res.json({ redirectUrl: twitter.getAuthUrl(requestToken) })
 
   @get '/twitter_callback', (req, res, next) ->
-    models.user.findById req.session.userId, (err, user) ->
-      return res.status(403).json({ message: 'No user provided. '}) if(err)
+    token              = req.query.oauth_token
+    verifier           = req.query.oauth_verifier
+    userId             = helpers.objectId(req.session.userId)
+    requestToken       = req.session.requestToken
+    requestTokenSecret = req.session.requestTokenSecret
 
-      token              = req.query.oauth_token
-      verifier           = req.query.oauth_verifier
-      requestToken       = req.session.requestToken
-      requestTokenSecret = req.session.requestTokenSecret
+    if !userId or !token or !verifier or !requestToken or !requestToken
+      return res.status(403).json({ message: 'Not all information provided.' })
 
-      if !token or !verifier or !requestToken or !requestToken
-        return res.status(403).json({ message: 'Not all information provided.' })
+    twitter.getAccessToken requestToken, requestTokenSecret, verifier, (err, accessToken, accessTokenSecret, results) ->
+      return res.status(403).json({ message: err }) if(err)
 
-      twitter.getAccessToken requestToken, requestTokenSecret, verifier, (err, accessToken, accessTokenSecret, results) ->
-        return res.status(403).json({ message: err }) if(err)
+      req.session.requestToken       = null
+      req.session.requestTokenSecret = null
+      req.session.userId             = null
 
-        user.requestToken       = null
-        user.requestTokenSecret = null
-        req.session.userId      = null
-        isNewToken              = true
+      models.account.findOne { userId: userId, accessToken: accessToken }, (err, account) ->
+        return next(err) if(err)
 
-        for account in user.accounts
-          if account.accessToken is accessToken
-            isNewToken = false
-            break
+        if account
+          return res.status(403).json({ message: 'Access Token already exists.' })
 
-        if isNewToken
-          T = new Twit
-            consumer_key:        config.twitter.consumerKey
-            consumer_secret:     config.twitter.consumerSecret
-            access_token:        accessToken
-            access_token_secret: accessTokenSecret
+        T = new Twit
+          consumer_key:        config.twitter.consumerKey
+          consumer_secret:     config.twitter.consumerSecret
+          access_token:        accessToken
+          access_token_secret: accessTokenSecret
 
-          T.get 'users/show', { screen_name: results.screen_name }, (err, data, response) ->
-            return res.status(403).json({ message: 'Cant fetch user information.' }) if(err)
+        T.get 'users/show', { screen_name: results.screen_name }, (err, data, response) ->
+          return res.status(403).json({ message: 'Cant fetch user information.' }) if(err)
 
-            user.accounts.push
-              accessToken:       accessToken
-              accessTokenSecret: accessTokenSecret
-              info:              data
+          account = new models.account
+            userId:            userId
+            accessToken:       accessToken
+            accessTokenSecret: accessTokenSecret
+            info:              data
 
-            user.save (err) ->
-              return next(err) if(err)
-              res.redirect '/#/accounts'
-        else
-          res.redirect '/#/accounts'
+          account.save (err) ->
+            return next(err) if(err)
+            res.redirect '/#/accounts'
