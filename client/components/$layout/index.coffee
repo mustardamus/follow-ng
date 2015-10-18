@@ -3,11 +3,12 @@ module.exports =
   template: require('./template')
 
   components:
-    'page-home'    : require('../page-home')
-    'page-login'   : require('../page-login')
-    'page-user'    : require('../page-user')
+    'page-home':     require('../page-home')
+    'page-login':    require('../page-login')
+    'page-user':     require('../page-user')
     'page-register': require('../page-register')
     'page-accounts': require('../page-accounts')
+    'page-friends':  require('../page-friends')
 
   data: ->
     currentPage: ''

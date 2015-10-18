@@ -5,6 +5,7 @@
       <a href="/#/login" class="item {{currentPage === 'login' ? 'active' : ''}}" v-if="!loggedIn">Login</a>
       <a href="/#/register" class="item {{currentPage === 'register' ? 'active' : ''}}" v-if="!loggedIn">Register</a>
       <a href="/#/accounts" class="item {{currentPage === 'accounts' ? 'active' : ''}}" v-if="loggedIn">Twitter Accounts</a>
+      <a href="/#/friends" class="item {{currentPage === 'friends' ? 'active' : ''}}" v-if="loggedIn">Potential Friends</a>
       <a href="/#/user" class="item {{currentPage === 'user' ? 'active' : ''}}" v-if="loggedIn">User</a>
       <a href="/#/logout" class="item" v-if="loggedIn">Logout</a>
     </div>
@@ -16,5 +17,6 @@
     <div v-if="currentPage === 'register'" v-component="page-register"></div>
     <div v-if="currentPage === 'user'" v-component="page-user"></div>
     <div v-if="currentPage === 'accounts'" v-component="page-accounts"></div>
+    <div v-if="currentPage === 'friends'" v-component="page-friends"></div>
   </div>
 </div>
