@@ -22,7 +22,7 @@ module.exports = (config, helpers, io, models) ->
   @get '/twitter_callback', (req, res, next) ->
     token              = req.query.oauth_token
     verifier           = req.query.oauth_verifier
-    userId             = helpers.objectId(req.session.userId)
+    userId             = req.session.userId
     requestToken       = req.session.requestToken
     requestTokenSecret = req.session.requestTokenSecret
 
