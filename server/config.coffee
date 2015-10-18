@@ -33,3 +33,7 @@ module.exports =
     consumerKey:    'SccAMm9AQEWgC5CI8yAG1QzYa'
     consumerSecret: '4s7ddqa7g49o48k0aFHjZD3rHzrBJi4SG0LHyUz9vfjDWFspZF'
     callback:       'http://127.0.0.1:7799/twitter_callback'
+
+  workers:
+    intervals: # in minutes
+      search: 30

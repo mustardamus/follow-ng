@@ -11,6 +11,10 @@ unless fs.existsSync("#{__dirname}/#{argv.worker}.coffee")
   console.log "Worker '#{argv.worker}.coffee' does not exist."
   return
 
+unless config.workers.intervals[argv.worker]
+  console.log "Please specify a interval for the worker '#{argv.worker}' in '../server/config.coffee'."
+  return
+
 initDir = (path) ->
   outObj = {}
 
@@ -32,13 +36,21 @@ db      = mongoose.connection
 for resourceName, modelFunc of models
   models[resourceName] = modelFunc.call(mongoose, helpers)
 
-db.once 'open', ->
-  console.log "Connected to database #{config.database.url}..."
-
 db.on 'error', ->
   console.log "Can not connect to database #{config.database.url}! 'mongod' running?"
 
-mongoose.connect config.database.url
+db.once 'open', ->
+  console.log "Connected to database #{config.database.url}..."
 
-worker = require("./#{argv.worker}")
-worker.call worker, config, models, helpers
+  worker     = require("./#{argv.worker}")
+  workerCall = ->
+    console.log "Call Worker '#{argv.worker}'..."
+    worker.call worker, config, models, helpers
+
+  setInterval ->
+    workerCall()
+  , 1000 * 60 * config.workers.intervals[argv.worker]
+
+  workerCall()
+
+mongoose.connect config.database.url
