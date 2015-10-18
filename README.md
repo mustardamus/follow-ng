@@ -5,6 +5,22 @@
 - [node-twitter-api](https://github.com/reneraab/node-twitter-api)
 - [twit](https://github.com/ttezel/twit)
 
+## Workers
+
+Workers are continues and work separate from the server. They are living in
+`./workers` and have a general loader in `./workers/index.coffee`.
+
+Workers are called with the config, initialized models and helpers as arguments.
+Define them like so (`./workers/search.coffee`):
+
+    module.exports = (config, models, helpers) ->
+      models.account.find {}, (err, accounts) ->
+        console.log 'found accounts', accounts.length
+
+Then you would call it like this:
+
+    coffee workers --worker=search
+
 ## Application Stack
 
 This environment is intended to be used in a modular way. Everything is a
