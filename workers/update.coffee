@@ -34,10 +34,10 @@ module.exports = class UpdateWorker
         @insertFriend id, { followed: true, backfollowed: true }
 
   insertFriend: (userId, extendObj) ->
-    @models.friend.findOne { accountId: @account._id, userId: @account.userId, 'info.id_str': "#{userId}" }, (err, friend) =>
+    @models.friend.findOne { accountId: @account._id, userId: @account.userId, 'info.id': userId }, (err, friend) =>
       return @log('error finding friend') if(err)
 
-      if friend and (friend.followed isnt true or friend.backfollowed isnt true)
+      if friend
         friend.update extendObj, (err) =>
           if err
             @log 'error updating friend', err
