@@ -35,6 +35,10 @@ module.exports =
       @$data.friends    = res.items
       @$data.loading    = false
 
+      setTimeout =>
+        $('img', @$el).popup()
+      , 200
+
     onFriendsError: (res) ->
       @$data.loading = false
       console.log 'error', res

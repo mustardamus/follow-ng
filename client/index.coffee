@@ -17,7 +17,7 @@ define ['jquery'], (jQuery) ->
   # require('../bower_components/semantic/dist/components/embed.js')
   # require('../bower_components/semantic/dist/components/modal.js')
   # require('../bower_components/semantic/dist/components/nag.js')
-  # require('../bower_components/semantic/dist/components/popup.js')
+  require('../bower_components/semantic/dist/components/popup.js')
   # require('../bower_components/semantic/dist/components/progress.js')
   # require('../bower_components/semantic/dist/components/rating.js')
   # require('../bower_components/semantic/dist/components/search.js')
@@ -25,7 +25,7 @@ define ['jquery'], (jQuery) ->
   # require('../bower_components/semantic/dist/components/sidebar.js')
   # require('../bower_components/semantic/dist/components/sticky.js')
   # require('../bower_components/semantic/dist/components/tab.js')
-  # require('../bower_components/semantic/dist/components/transition.js')
+  require('../bower_components/semantic/dist/components/transition.js')
 
   jQuery ->
     $root = Vue.extend(require('./components/$root'))
