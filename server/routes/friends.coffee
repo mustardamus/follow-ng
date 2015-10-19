@@ -2,7 +2,7 @@ module.exports = (config, helpers, io, models) ->
   auth = require('../middleware/auth')(config, helpers, models)
 
   @get '/friends', auth, (req, res, next) ->
-    limit  = 40
+    limit  = 48
     page   = ((req.query.page or 1) - 1) * limit # turn page 1 into 0 based
     retObj =
       'info.profile_image_url': 1
