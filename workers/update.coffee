@@ -34,11 +34,11 @@ class ProcessAccount
         @insertFriend id, { followed: true, backfollowed: true }
 
   insertFriend: (userId, extendObj) ->
-    @models.friend.find { accountId: @account._id, userId: @account.userId, 'info.id': userId }, (err, friend) =>
+    @models.friend.findOne { accountId: @account._id, userId: @account.userId, 'info.id': userId }, (err, friend) =>
       return console.log('error finding friend') if(err)
 
-      if friend
-        friend.update extendObj, (err) ->
+      if friend and (friend.followed isnt true or friend.backfollowed isnt true)
+        friend.update extendObj, (err) =>
           if err
             console.log 'error updating friend', err
           else
