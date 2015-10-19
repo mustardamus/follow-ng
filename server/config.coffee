@@ -37,4 +37,5 @@ module.exports =
 
   workers:
     intervals: # in minutes
-      search: 30
+      search: 15
+      update: 15
