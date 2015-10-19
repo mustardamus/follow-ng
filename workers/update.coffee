@@ -1,8 +1,8 @@
 Twit = require('twit')
 _    = require('lodash')
 
-class ProcessAccount
-  constructor: (@config, @models, @account) ->
+module.exports = class UpdateWorker
+  constructor: (@config, @models, @helpers, @account, @log) ->
     @workerName        = 'update'
     @modelName         = null
     @followerIds       = []
@@ -16,11 +16,11 @@ class ProcessAccount
       access_token_secret: @account.accessTokenSecret
 
     @twit.get 'followers/ids', { screen_name: @account.info.screen_name }, (err, data, response) =>
-      return console.log('Error receiving follower ids - ', err.message) if(err)
+      return @log('Error receiving follower ids - ', err.message) if(err)
       @followerIds = data.ids
 
       @twit.get 'friends/ids', { screen_name: @account.info.screen_name }, (err, data, response) =>
-        return console.log('Error receiving friends ids - ', err.message) if(err)
+        return @log('Error receiving friends ids - ', err.message) if(err)
         @friendIds = data.ids
 
         @processIds()
@@ -35,21 +35,21 @@ class ProcessAccount
 
   insertFriend: (userId, extendObj) ->
     @models.friend.findOne { accountId: @account._id, userId: @account.userId, 'info.id': userId }, (err, friend) =>
-      return console.log('error finding friend') if(err)
+      return @log('error finding friend') if(err)
 
       if friend and (friend.followed isnt true or friend.backfollowed isnt true)
         friend.update extendObj, (err) =>
           if err
-            console.log 'error updating friend', err
+            @log 'error updating friend', err
           else
-            console.log "Updated friend #{friend.info.screen_name} for account #{@account.info.screen_name}."
+            @log "Updated friend #{friend.info.screen_name} for account #{@account.info.screen_name}."
       else
         return if(@rateLimitExceeded)
 
         @twit.get 'users/show', { user_id: userId }, (err, data, response) =>
           if err
             @rateLimitExceeded = true if(err.code is 88)
-            console.log('error receiving user data - ', err.message) if(err)
+            @log('error receiving user data - ', err.message) if(err)
             return
 
           data =
@@ -65,15 +65,6 @@ class ProcessAccount
 
           friend.save (err) =>
             if err
-              console.log 'error saving friend', err
+              @log 'error saving friend', err
             else
-              console.log "Saved friend #{friend.info.screen_name} for account #{@account.info.screen_name}."
-
-
-module.exports = (config, models, helpers) ->
-  models.account.find {}, (err, accounts) ->
-    return console.log('Error finding accounts', err) if(err)
-
-    for account in accounts
-      do (account) ->
-        new ProcessAccount(config, models, account)
+              @log "Saved friend #{friend.info.screen_name} for account #{@account.info.screen_name}."

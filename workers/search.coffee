@@ -1,8 +1,8 @@
 Twit = require('twit')
 _    = require('lodash')
 
-class ProcessAccount
-  constructor: (@config, @models, @account) ->
+module.exports = class SearchWorker
+  constructor: (@config, @models, @helpers, @account, @log) ->
     @workerName = 'search'
     @modelName  = 'term'
 
@@ -13,7 +13,7 @@ class ProcessAccount
       access_token_secret: @account.accessTokenSecret
 
     @models.term.find { accountId: @account._id }, (err, terms) =>
-      return console.log("Error finding terms for account #{@account.info.screen_name}", err) if err
+      return @log("Error finding terms for account #{@account.info.screen_name}", err) if err
 
       for term in terms
         @processTerm term
@@ -22,10 +22,10 @@ class ProcessAccount
     searchObj = { q: term.term, count: 100, since_id: term.since_id_str }
 
     @twit.get 'search/tweets', searchObj, (err, data, response) =>
-      return console.log("Error searching Twitter", { screen_name: @account.info.screen_name, term: term.term }) if(err)
+      return @log("Error searching Twitter", { screen_name: @account.info.screen_name, term: term.term }) if(err)
 
       term.update { since_id_str: data.search_metadata.max_id_str }, (err) ->
-        console.log('Error saving since_id') if(err)
+        @log('Error saving since_id') if(err)
 
       usernamesArr    = []
       uniqueStatusArr = []
@@ -45,7 +45,7 @@ class ProcessAccount
     findObj  = { userId: @account.userId, accountId: @account._id, 'info.screen_name': userInfo.screen_name }
 
     @models.friend.count findObj, (err, count) =>
-      return console.log("Error counting friend models") if(err)
+      return @log("Error counting friend models") if(err)
       return if(count isnt 0) # already in db
 
       friend = new @models.friend
@@ -61,15 +61,6 @@ class ProcessAccount
 
       friend.save (err) =>
         if(err)
-          console.log 'Error saving friend', friend.info.screen_name
+          @log 'Error saving friend', friend.info.screen_name
         else
-          console.log 'Saved potential friend', friend.info.screen_name, 'for account', @account.info.screen_name, 'with term', term.term
-
-
-module.exports = (config, models, helpers) ->
-  models.account.find {}, (err, accounts) ->
-    return console.log('Error finding accounts', err) if err
-
-    for account in accounts
-      do (account) ->
-        new ProcessAccount(config, models, account)
+          @log 'Saved potential friend', friend.info.screen_name, 'for account', @account.info.screen_name, 'with term', term.term

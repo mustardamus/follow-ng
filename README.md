@@ -10,14 +10,14 @@
 Workers are continues and work separate from the server. They are living in
 `./workers` and have a general loader in `./workers/index.coffee`.
 
-Workers are called with the config, initialized models and helpers as arguments.
-They have to export a function that is called by the loader in an interval.
+Workers are called with the config, initialized models, helpers, the account to
+process and the log function as arguments.
+They have to export a class that is called by the loader in an interval.
 
 Define them like so (`./workers/search.coffee`):
 
-    module.exports = (config, models, helpers) ->
-      models.account.find {}, (err, accounts) ->
-        console.log 'found accounts', accounts.length
+    module.exports = class SearchWorker
+      constructor: (@config, @models, @helpers, @account, @log) ->
 
 And set the interval in `./server/config.coffee` like so:
 

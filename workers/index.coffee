@@ -42,10 +42,15 @@ db.on 'error', ->
 db.once 'open', ->
   console.log "Connected to database #{config.database.url}..."
 
-  worker     = require("./#{argv.worker}")
+  Worker     = require("./#{argv.worker}")
+  logFunc    = (args...) -> console.log(args)
   workerCall = ->
-    console.log "Call Worker '#{argv.worker}'..."
-    worker.call worker, config, models, helpers
+    models.account.find {}, (err, accounts) ->
+      return console.log('Error finding accounts', err) if(err)
+
+      for account in accounts
+        do (account) ->
+          new Worker(config, models, helpers, account, logFunc)
 
   setInterval ->
     workerCall()
