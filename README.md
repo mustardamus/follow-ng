@@ -29,6 +29,19 @@ Then you would call it like this:
 
     coffee workers --worker=search
 
+### Search Worker
+
+This worker searches for every Term associated with a Account and puts the found
+Friend in the database, if it does not yet exist. If it doesn't exist, it also
+fetches the user information from Twitter.
+
+### Update Worker
+
+This worker get all Followers and Friends of a Account. It then splits the ID's
+into Followback (Account follows Friend, Friend follows Account), Followers and
+Friends. Then it checks if the Friend is already in the Database, if not it
+fetches the information from Twitter and stores it in the database.
+
 ## Application Stack
 
 This environment is intended to be used in a modular way. Everything is a
