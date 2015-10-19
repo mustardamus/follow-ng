@@ -49,12 +49,12 @@ module.exports =
 
     onRemoveSearchTermClick: (e) ->
       vm       = e.targetVM
-      term     = vm.$value
+      term     = vm.$data.term
       parentVm = vm.$parent
       outArr = []
 
       for searchTerm in parentVm.$data.terms
-        outArr.push(searchTerm) if(searchTerm isnt term)
+        outArr.push(searchTerm) if(searchTerm.term isnt term)
 
       @removeSearchTermRequest vm.$parent.$data.screen_name, term
       vm.$parent.$data.terms = outArr
@@ -72,7 +72,7 @@ module.exports =
 
       if term.length isnt 0
         @addSearchTermRequest vm.$data.screen_name, term
-        vm.$data.terms.push term
+        vm.$data.terms.push { term: term }
         vm.$data.term = ''
 
     addSearchTermRequest: (screen_name, term) ->

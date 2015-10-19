@@ -12,13 +12,8 @@ module.exports = (config, helpers, io, models) ->
         toGo++
 
         do (account) ->
-          models.term.find { userId: req.user._id, accountId: account._id }, (err, terms) ->
+          models.term.find { userId: req.user._id, accountId: account._id }, { term: 1 }, (err, terms) ->
             return if(err)
-
-            termsArr = []
-
-            for term in terms
-              termsArr.push term.term
 
             retArr.push
               screen_name:       account.info.screen_name
@@ -26,7 +21,7 @@ module.exports = (config, helpers, io, models) ->
               friends_count:     account.info.friends_count
               followers_count:   account.info.followers_count
               profile_image_url: account.info.profile_image_url
-              terms:             termsArr
+              terms:             terms
 
             toGo--
             res.json(retArr) if(toGo is 0)
