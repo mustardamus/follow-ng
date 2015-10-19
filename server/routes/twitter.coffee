@@ -2,7 +2,7 @@ twitterAPI = require('node-twitter-api')
 Twit       = require('twit')
 
 module.exports = (config, helpers, io, models) ->
-  auth = require('../middleware/auth')(config, helpers)
+  auth = require('../middleware/auth')(config, helpers, models)
 
   twitter = new twitterAPI
     consumerKey:    config.twitter.consumerKey

@@ -55,6 +55,9 @@ class ProcessAccount
         sourceWorker: @workerName
         sourceModel:  @modelName
         sourceId:     term._id
+        followed:     false
+        unfollowed:   false
+        backfollowed: false
 
       friend.save (err) =>
         if(err)

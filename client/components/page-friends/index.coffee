@@ -21,8 +21,9 @@ module.exports =
         success:  @onFriendsSuccess
         error:    @onFriendsError
 
-    onFriendsSuccess: (friends) ->
-      @$data.friends = friends
+    onFriendsSuccess: (res) ->
+      console.log res
+      @$data.friends = res.friends
 
     onFriendsError: (res) ->
       console.log 'error', res

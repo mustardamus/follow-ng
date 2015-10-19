@@ -1,5 +1,5 @@
 module.exports = (config, helpers, io, models) ->
-  auth = require('../middleware/auth')(config, helpers)
+  auth = require('../middleware/auth')(config, helpers, models)
 
   @get '/accounts', auth, (req, res, next) ->
     retArr = []

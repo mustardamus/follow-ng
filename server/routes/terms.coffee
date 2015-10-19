@@ -1,5 +1,5 @@
 module.exports = (config, helpers, io, models) ->
-  auth = require('../middleware/auth')(config, helpers)
+  auth = require('../middleware/auth')(config, helpers, models)
 
   @post '/terms', auth, (req, res, next) ->
     userId      = req.user._id

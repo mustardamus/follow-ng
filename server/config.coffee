@@ -28,6 +28,7 @@ module.exports =
       invalidEmail   : 'Invalid E-Mail address.'
       noToken        : 'No token provided.'
       invalidToken   : 'Invalid token.'
+      userFindError  : 'Can not find user.'
 
   twitter:
     consumerKey:    'SccAMm9AQEWgC5CI8yAG1QzYa'
