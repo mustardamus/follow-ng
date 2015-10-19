@@ -26,12 +26,25 @@ module.exports = class UpdateWorker
         @processIds()
 
   processIds: ->
-    @processFollowCompleteIds _.union(@followerIds, @friendIds)
+    unionIds    = _.union(@followerIds, @friendIds)
+    followerIds = _.difference(@followerIds, unionIds)
+    friendIds   = _.difference(@friendIds, unionIds)
+
+    @processFollowCompleteIds unionIds
+    @processFollowerIds followerIds
+    @processFriendIds friendIds
 
   processFollowCompleteIds: (ids) ->
     for id in ids
-      do (id) =>
-        @insertFriend id, { followed: true, backfollowed: true }
+      @insertFriend id, { followed: true, backfollowed: true }
+
+  processFollowerIds: (ids) ->
+    for id in ids
+      @insertFriend id, { followed: false, backfollowed: true }
+
+  processFriendIds: (ids) ->
+    for id in ids
+      @insertFriend id, { followed: true, backfollowed: false }
 
   insertFriend: (userId, extendObj) ->
     @models.friend.findOne { accountId: @account._id, userId: @account.userId, 'info.id': userId }, (err, friend) =>
