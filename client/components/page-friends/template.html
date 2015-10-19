@@ -1,5 +1,20 @@
 <div class="page-friends">
-  <ul>
-    <li v-repeat="friends">{{info.screen_name}} {{info.followers_count}}</li>
-  </ul>
+  <div class="ui grid">
+    <div v-repeat="friends" class="one wide column">
+      <img v-attr="src:info.profile_image_url">
+    </div>
+  </div>
+
+  <div class="ui pagination menu">
+    <a class="item" v-on="click:onPrevPageClick">
+      <i class="angle left icon"></i>
+    </a>
+    <div class="disabled item">
+      <span v-if="!loading">{{currentPage}}</span>
+      <div v-if="loading" class="ui active mini inline loader"></div>
+    </div>
+    <a class="item" v-on="click:onNextPageClick">
+      <i class="angle right icon"></i>
+    </a>
+  </div>
 </div>

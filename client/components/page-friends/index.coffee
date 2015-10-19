@@ -3,7 +3,10 @@ module.exports =
   template: require('./template')
 
   data: ->
-    friends: []
+    friends:     []
+    currentPage: 1
+    totalPages:  1
+    loading:     false
 
   ready: ->
     if @$root.$data.loggedIn
@@ -12,18 +15,34 @@ module.exports =
     @$root.$watch 'loggedIn', (loggedIn) =>
       @friendsRequest() if(loggedIn)
 
+    @$watch 'currentPage', ->
+      @friendsRequest()
+
   methods:
     friendsRequest: ->
+      @$data.loading = true
+
       $.ajax
         url:      '/friends'
         type:     'GET'
         dataType: 'json'
+        data:     { page: @$data.currentPage }
         success:  @onFriendsSuccess
         error:    @onFriendsError
 
     onFriendsSuccess: (res) ->
-      console.log res
-      @$data.friends = res.friends
+      @$data.totalPages = res.pages
+      @$data.friends    = res.items
+      @$data.loading    = false
 
     onFriendsError: (res) ->
+      @$data.loading = false
       console.log 'error', res
+
+    onPrevPageClick: ->
+      if @$data.currentPage - 1 > 0
+        @$data.currentPage--
+
+    onNextPageClick: ->
+      if @$data.currentPage + 1 <= @$data.totalPages
+        @$data.currentPage++
