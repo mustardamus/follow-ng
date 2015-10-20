@@ -54,6 +54,30 @@ module.exports =
     onAccountClick: (e) ->
       @$data.accountId = e.targetVM.$data._id
 
+    onSaveSettingsClick: (e) ->
+      @saveSettingsRequest()
+      e.preventDefault()
+
+    saveSettingsRequest: ->
+      $('.form.settings', @$el).addClass 'loading'
+
+      data =
+        unfollowInitialFriends: $('#unfollowInitialFriends', @$el).is(':checked')
+
+      $.ajax
+        url:      '/accounts/settings'
+        type:     'POST'
+        dataType: 'json'
+        data:     data
+        success:  @onSaveSettingsSuccess
+        error:    @onSaveSettingsError
+
+    onSaveSettingsSuccess: (res) ->
+      $('.form.settings', @$el).removeClass 'loading'
+
+    onSaveSettingsError: (res) ->
+      $('.form.settings', @$el).removeClass 'loading'
+
     onRemoveSearchTermClick: (e) ->
       vm       = e.targetVM
       term     = vm.$data.term

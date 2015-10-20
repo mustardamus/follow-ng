@@ -18,7 +18,7 @@
             <i class="settings icon disabled"></i> Account Settings
           </h2>
 
-          <form class="ui form">
+          <form class="ui form settings">
             <div class="ui segment">
               <div class="field">
                 <div class="ui toggle checkbox">
@@ -39,7 +39,7 @@
             </div>
 
             <div class="field submit">
-              <div class="ui button">Save Settings</div>
+              <input class="ui button" type="submit" value="Save Settings" v-on="click:onSaveSettingsClick">
             </div>
           </form>
         </div>
