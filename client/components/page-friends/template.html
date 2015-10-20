@@ -1,7 +1,14 @@
 <div class="page-friends">
   <div class="ui grid">
     <div class="four wide column">
-      <div class="ui vertical menu">
+      <div class="ui vertical pointing menu accounts">
+        <a v-repeat="accounts" v-on="click:onAccountClick" class="item">
+          <img class="ui bordered rounded image" v-attr="src:info.profile_image_url">
+          @{{info.screen_name}}
+        </a>
+      </div>
+
+      <div class="ui vertical pointing menu">
         <a v-on="click:onMenuItemClick" data-mode="followback" class="item {{ mode === 'followback' ? 'active teal' : ''}}">
           Follow Back
           <div class="ui label {{ mode === 'followback' ? 'teal' : ''}}">{{numbers.followback}}</div>

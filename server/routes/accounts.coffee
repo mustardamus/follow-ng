@@ -11,6 +11,7 @@ module.exports = (config, helpers, io, models) ->
 
     models.account.find { userId: req.user._id }, retObj, (err, accounts) ->
       return next(err) if(err)
+      res.json(accounts)
 
   @get '/accounts/terms', auth, (req, res, next) ->
     retArr = []

@@ -9,21 +9,38 @@ module.exports =
     loading:     false
     mode:        'followback' # followers | friends | potentialfriends
     numbers:     { followback: 0, followers: 0, friends: 0, potentialfriends: 0 }
+    accounts:    []
 
   ready: ->
     if @$root.$data.loggedIn
-      @numbersRequest()
-      @friendsRequest()
+      @startRequests()
 
     @$root.$watch 'loggedIn', (loggedIn) =>
-      if(loggedIn)
-        @numbersRequest()
-        @friendsRequest()
+      @startRequests() if(loggedIn)
 
     @$watch 'currentPage', ->
       @friendsRequest()
 
   methods:
+    startRequests: ->
+      @accountsRequest()
+      @numbersRequest()
+      @friendsRequest()
+
+    accountsRequest: ->
+      $.ajax
+        url:      '/accounts'
+        type:     'GET'
+        dataType: 'json'
+        success:  @onAccountsSuccess
+        error:    @onAccountsError
+
+    onAccountsSuccess: (accounts) ->
+      @$data.accounts = accounts
+
+    onAccountsError: (res) ->
+      console.log 'error', res
+
     numbersRequest: ->
       $.ajax
         url:      '/friends/numbers'
@@ -75,3 +92,11 @@ module.exports =
       @$data.currentPage = 1
 
       @friendsRequest()
+
+    onAccountClick: (e) ->
+      vm = e.targetVM
+      id = vm.$data._id
+      el = $(e.toElement)
+
+      $('.menu.accounts .active.teal', @$el).removeClass 'active teal'
+      el.addClass 'active teal'
