@@ -2,6 +2,17 @@ module.exports = (config, helpers, io, models) ->
   auth = require('../middleware/auth')(config, helpers, models)
 
   @get '/accounts', auth, (req, res, next) ->
+    retObj =
+      'info.screen_name':       1
+      'info.profile_image_url': 1
+      'info.statuses_count':    1
+      'info.friends_count':     1
+      'followers_count':        1
+
+    models.account.find { userId: req.user._id }, retObj, (err, accounts) ->
+      return next(err) if(err)
+
+  @get '/accounts/terms', auth, (req, res, next) ->
     retArr = []
     toGo   = 0
 
@@ -16,6 +27,7 @@ module.exports = (config, helpers, io, models) ->
             return if(err)
 
             retArr.push
+              _id:               account._id
               screen_name:       account.info.screen_name
               statuses_count:    account.info.statuses_count
               friends_count:     account.info.friends_count

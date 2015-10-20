@@ -35,7 +35,7 @@ module.exports =
 
     accountsRequest: ->
       $.ajax
-        url:      '/accounts'
+        url:      '/accounts/terms'
         type:     'GET'
         dataType: 'json'
         success:  @onAccountsSuccess
