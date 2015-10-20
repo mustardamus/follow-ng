@@ -3,19 +3,23 @@
     <div class="four wide column">
       <div class="ui vertical menu">
         <a v-on="click:onMenuItemClick" data-mode="followback" class="item {{ mode === 'followback' ? 'active teal' : ''}}">
-          Follow Back <div class="ui label {{ mode === 'followback' ? 'teal' : ''}}">0</div>
+          Follow Back
+          <div class="ui label {{ mode === 'followback' ? 'teal' : ''}}">{{numbers.followback}}</div>
         </a>
 
         <a v-on="click:onMenuItemClick" data-mode="followers" class="item {{ mode === 'followers' ? 'active teal' : ''}}">
-          Followers <div class="ui label {{ mode === 'followers' ? 'teal' : ''}}">0</div>
+          Followers
+          <div class="ui label {{ mode === 'followers' ? 'teal' : ''}}">{{numbers.followers}}</div>
         </a>
 
         <a v-on="click:onMenuItemClick" data-mode="friends" class="item {{ mode === 'friends' ? 'active teal' : ''}}">
-          Friends <div class="ui label {{ mode === 'friends' ? 'teal' : ''}}">0</div>
+          Friends
+          <div class="ui label {{ mode === 'friends' ? 'teal' : ''}}">{{numbers.friends}}</div>
         </a>
 
         <a v-on="click:onMenuItemClick" data-mode="potentialfriends" class="item {{ mode === 'potentialfriends' ? 'active teal' : ''}}">
-          Potential Friends <div class="ui label {{ mode === 'potentialfriends' ? 'teal' : ''}}">0</div>
+          Potential Friends
+          <div class="ui label {{ mode === 'potentialfriends' ? 'teal' : ''}}">{{numbers.potentialfriends}}</div>
         </a>
       </div>
     </div>
