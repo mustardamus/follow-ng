@@ -11,7 +11,7 @@ define ['jquery'], (jQuery) ->
     window.io = require('socket.io-client')()
 
   # require('../bower_components/semantic/dist/components/accordion.js')
-  # require('../bower_components/semantic/dist/components/checkbox.js')
+  require('../bower_components/semantic/dist/components/checkbox.js')
   # require('../bower_components/semantic/dist/components/dimmer.js')
   # require('../bower_components/semantic/dist/components/dropdown.js')
   # require('../bower_components/semantic/dist/components/embed.js')

@@ -5,7 +5,7 @@ module.exports =
   data: ->
     accounts:  @$root.$data.accounts
     accountId: if @$root.$data.accounts[0] then @$root.$data.accounts[0].id else ''
-    
+
   ready: ->
     if @$root.$data.loggedIn and @$data.accounts.length is 0
       @accountsRequest()
@@ -16,6 +16,8 @@ module.exports =
 
     @$root.$watch 'accounts', (accounts) =>
       @$data.accounts = accounts
+
+    $('.ui.checkbox', @$el).checkbox()
 
   methods:
     onAddAccountClick: ->

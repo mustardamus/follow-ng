@@ -12,7 +12,44 @@
     </div>
 
     <div class="twelve wide column">
-      wooo
+      <div class="ui grid">
+        <div class="eight wide column">
+          <h2 class="ui center aligned header">
+            <i class="settings icon disabled"></i> Account Settings
+          </h2>
+
+          <form class="ui form">
+            <div class="ui segment">
+              <div class="field">
+                <div class="ui toggle checkbox">
+                  <input type="checkbox" id="unfollowInitialFriends" name="unfollowInitialFriends" class="hidden">
+                  <label for="unfollowInitialFriends">Unfollow Initial/Self-Added Friends</label>
+                </div>
+
+                <div class="ui message">
+                  <p>
+                    Allow to unfollow friends who don't follow you back that:
+                  </p>
+                  <ul>
+                    <li>Existed before you began to use Follow-ng</li>
+                    <li>You start following outside of Follow-ng</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="field submit">
+              <div class="ui button">Save Settings</div>
+            </div>
+          </form>
+        </div>
+
+        <div class="eight wide column">
+          <h2 class="ui center aligned header">
+            <i class="tags icon disabled"></i> Search Terms
+          </h2>
+        </div>
+      </div>
     </div>
   </div>
 </div>
