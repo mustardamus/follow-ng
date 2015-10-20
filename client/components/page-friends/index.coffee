@@ -9,23 +9,32 @@ module.exports =
     loading:     false
     mode:        'followback' # followers | friends | potentialfriends
     numbers:     { followback: 0, followers: 0, friends: 0, potentialfriends: 0 }
-    accounts:    []
-    accountId:   '' # which account query the friends for
+    accounts:    @$root.$data.accounts
+    accountId:   if @$root.$data.accounts[0] then @$root.$data.accounts[0].id else ''
 
   ready: ->
     if @$root.$data.loggedIn
-      @startRequests()
+      if @$data.accounts.length is 0
+        @accountsRequest()
+      else
+        @numbersRequest()
+        @friendsRequest()
 
     @$root.$watch 'loggedIn', (loggedIn) =>
-      @startRequests() if(loggedIn)
+      if loggedIn and @$data.accounts.length is 0
+        @accountsRequest()
+
+    @$root.$watch 'accounts', (accounts) =>
+      @$data.accounts = accounts
 
     @$watch 'currentPage', ->
       @friendsRequest()
 
-  methods:
-    startRequests: ->
-      @accountsRequest()
+    @$watch 'accountId', ->
+      @numbersRequest()
+      @friendsRequest()
 
+  methods:
     accountsRequest: ->
       $.ajax
         url:      '/accounts'
@@ -35,15 +44,11 @@ module.exports =
         error:    @onAccountsError
 
     onAccountsSuccess: (accounts) ->
-      @$data.accounts  = accounts
-      @$data.accountId = accounts[0]._id
+      @$root.$data.accounts = accounts
+      @$data.accountId      = accounts[0]._id
 
       @numbersRequest()
       @friendsRequest()
-
-      setTimeout =>
-        $('.menu.accounts .item', @$el).first().addClass 'active teal'
-      , 50
 
     onAccountsError: (res) ->
       console.log 'error', res
@@ -101,14 +106,4 @@ module.exports =
       @friendsRequest()
 
     onAccountClick: (e) ->
-      vm = e.targetVM
-      id = vm.$data._id
-      el = $(e.toElement)
-
-      $('.menu.accounts .active.teal', @$el).removeClass 'active teal'
-      el.addClass 'active teal'
-
-      @$data.accountId = vm.$data._id
-
-      @numbersRequest()
-      @friendsRequest()
+      @$data.accountId = e.targetVM.$data._id

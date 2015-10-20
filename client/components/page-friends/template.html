@@ -2,7 +2,7 @@
   <div class="ui grid">
     <div class="four wide column">
       <div class="ui vertical pointing menu accounts">
-        <a v-repeat="accounts" v-on="click:onAccountClick" class="item">
+        <a v-repeat="accounts" v-on="click:onAccountClick" class="item {{ id === accountId ? 'active teal' : '' }}">
           <img class="ui bordered rounded image" v-attr="src:info.profile_image_url">
           @{{info.screen_name}}
         </a>

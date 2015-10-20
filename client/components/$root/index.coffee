@@ -29,6 +29,10 @@ module.exports =
         @$data.currentToken = null
         location.hash       = '/'
 
+    @$watch 'accounts', (accounts) ->
+      for account in accounts
+        account.id = account._id # turn mongo _id in id because it cant be read in templates
+
   methods:
     ajaxSetup: ->
       $.ajaxSetup

@@ -3,8 +3,9 @@ module.exports =
   template: require('./template')
 
   data: ->
-    accounts: @$root.$data.accounts
-
+    accounts:  @$root.$data.accounts
+    accountId: if @$root.$data.accounts[0] then @$root.$data.accounts[0].id else ''
+    
   ready: ->
     if @$root.$data.loggedIn and @$data.accounts.length is 0
       @accountsRequest()
@@ -35,17 +36,21 @@ module.exports =
 
     accountsRequest: ->
       $.ajax
-        url:      '/accounts/terms'
+        url:      '/accounts'
         type:     'GET'
         dataType: 'json'
         success:  @onAccountsSuccess
         error:    @onAccountsError
 
-    onAccountsSuccess: (accountsArr) ->
-      @$root.$data.accounts = accountsArr
+    onAccountsSuccess: (accounts) ->
+      @$root.$data.accounts = accounts
+      @$data.accountId      = accounts[0]._id
 
     onAccountsError: (res) ->
       console.log 'get accounts error', res
+
+    onAccountClick: (e) ->
+      @$data.accountId = e.targetVM.$data._id
 
     onRemoveSearchTermClick: (e) ->
       vm       = e.targetVM
