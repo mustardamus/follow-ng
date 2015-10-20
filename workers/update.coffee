@@ -1,19 +1,12 @@
-Twit = require('twit')
-_    = require('lodash')
+_ = require('lodash')
 
 module.exports = class UpdateWorker
-  constructor: (@config, @models, @helpers, @account, @log) ->
+  constructor: (@config, @models, @helpers, @account, @log, @twit) ->
     @workerName        = 'update'
     @modelName         = null
     @followerIds       = []
     @friendIds         = []
     @rateLimitExceeded = false
-
-    @twit = new Twit
-      consumer_key:        @config.twitter.consumerKey
-      consumer_secret:     @config.twitter.consumerSecret
-      access_token:        @account.accessToken
-      access_token_secret: @account.accessTokenSecret
 
     @twit.get 'followers/ids', { screen_name: @account.info.screen_name }, (err, data, response) =>
       return @log('Error receiving follower ids - ', err.message) if(err)

@@ -1,6 +1,7 @@
 fs       = require('fs')
 mongoose = require('mongoose')
 argv     = require('yargs').argv
+Twit     = require('twit')
 config   = require('../server/config')
 
 unless argv.worker
@@ -50,7 +51,13 @@ db.once 'open', ->
 
       for account in accounts
         do (account) ->
-          new Worker(config, models, helpers, account, logFunc)
+          twit = new Twit
+            consumer_key:        config.twitter.consumerKey
+            consumer_secret:     config.twitter.consumerSecret
+            access_token:        account.accessToken
+            access_token_secret: account.accessTokenSecret
+
+          new Worker(config, models, helpers, account, logFunc, twit)
 
   setInterval ->
     workerCall()

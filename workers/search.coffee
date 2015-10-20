@@ -1,16 +1,9 @@
-Twit = require('twit')
-_    = require('lodash')
+_ = require('lodash')
 
 module.exports = class SearchWorker
-  constructor: (@config, @models, @helpers, @account, @log) ->
+  constructor: (@config, @models, @helpers, @account, @log, @twit) ->
     @workerName = 'search'
     @modelName  = 'term'
-
-    @twit = new Twit
-      consumer_key:        @config.twitter.consumerKey
-      consumer_secret:     @config.twitter.consumerSecret
-      access_token:        @account.accessToken
-      access_token_secret: @account.accessTokenSecret
 
     @models.term.find { accountId: @account._id }, (err, terms) =>
       return @log("Error finding terms for account #{@account.info.screen_name}", err) if err

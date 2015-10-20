@@ -11,13 +11,13 @@ Workers are continues and work separate from the server. They are living in
 `./workers` and have a general loader in `./workers/index.coffee`.
 
 Workers are called with the config, initialized models, helpers, the account to
-process and the log function as arguments.
+process, the log function and the initialized Twit module as arguments.
 They have to export a class that is called by the loader in an interval.
 
 Define them like so (`./workers/search.coffee`):
 
     module.exports = class SearchWorker
-      constructor: (@config, @models, @helpers, @account, @log) ->
+      constructor: (@config, @models, @helpers, @account, @log, @twit) ->
 
 And set the interval in `./server/config.coffee` like so:
 
