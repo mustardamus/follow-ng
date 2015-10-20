@@ -26,15 +26,25 @@ module.exports = class UpdateWorker
         @processIds()
 
   processIds: ->
-    unionIds    = _.union(@followerIds, @friendIds)
-    followerIds = _.difference(@followerIds, unionIds)
-    friendIds   = _.difference(@friendIds, unionIds)
+    followbackIds = []
+    followerIds   = []
+    friendIds     = []
 
-    @processFollowCompleteIds unionIds
+    for followerId in @followerIds
+      if _.indexOf(@friendIds, followerId) isnt -1
+        followbackIds.push followerId
+      else
+        followerIds.push followerId
+
+    for friendId in @friendIds
+      if _.indexOf(followbackIds, friendId) is -1
+        friendIds.push friendId
+
+    @processFollowbackIds followbackIds
     @processFollowerIds followerIds
     @processFriendIds friendIds
 
-  processFollowCompleteIds: (ids) ->
+  processFollowbackIds: (ids) ->
     for id in ids
       @insertFriend id, { followed: true, backfollowed: true }
 
