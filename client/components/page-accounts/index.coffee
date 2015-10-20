@@ -5,6 +5,9 @@ module.exports =
   data: ->
     accounts:  @$root.$data.accounts
     accountId: if @$root.$data.accounts[0] then @$root.$data.accounts[0].id else ''
+    settingsDefault:
+      unfollowInitialFriends: false
+    settings: @$data.settingsDefault
 
   ready: ->
     if @$root.$data.loggedIn and @$data.accounts.length is 0
@@ -16,6 +19,9 @@ module.exports =
 
     @$root.$watch 'accounts', (accounts) =>
       @$data.accounts = accounts
+
+    @$watch 'accountId', (id) ->
+      $('.form.settings', @$el).removeClass 'success error'
 
     $('.ui.checkbox', @$el).checkbox()
 
@@ -62,6 +68,7 @@ module.exports =
       $('.form.settings', @$el).addClass 'loading'
 
       data =
+        accountId:              @$data.accountId
         unfollowInitialFriends: $('#unfollowInitialFriends', @$el).is(':checked')
 
       $.ajax
@@ -73,10 +80,14 @@ module.exports =
         error:    @onSaveSettingsError
 
     onSaveSettingsSuccess: (res) ->
-      $('.form.settings', @$el).removeClass 'loading'
+      $('.form.settings', @$el)
+        .addClass('success')
+        .removeClass('loading')
 
     onSaveSettingsError: (res) ->
-      $('.form.settings', @$el).removeClass 'loading'
+      $('.form.settings', @$el)
+        .addClass('error')
+        .removeClass('loading')
 
     onRemoveSearchTermClick: (e) ->
       vm       = e.targetVM

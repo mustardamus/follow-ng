@@ -3,6 +3,7 @@ module.exports = (config, helpers, io, models) ->
 
   @get '/accounts', auth, (req, res, next) ->
     retObj =
+      settings:                 1
       'info.screen_name':       1
       'info.profile_image_url': 1
       'info.statuses_count':    1
@@ -12,6 +13,26 @@ module.exports = (config, helpers, io, models) ->
     models.account.find { userId: req.user._id }, retObj, (err, accounts) ->
       return next(err) if(err)
       res.json(accounts)
+
+  @post '/accounts/settings', auth, (req, res, next) ->
+    accountId = req.body.accountId
+    delete req.body.accountId
+    settings = req.body
+
+    for setName, setVal of settings # turn into true bools
+      if typeof setVal is 'string'
+        settings[setName] = true if(setVal is 'true')
+        settings[setName] = false if(setVal is 'false')
+
+    models.account.findOne { _id: accountId, userId: req.user._id }, (err, account) ->
+      return res.status(403).json({ success: false }) if(err)
+      return res.status(404).json({ success: false }) unless(account)
+
+      account.update { settings: settings }, (err) ->
+        if err
+          res.status(403).json({ success: false })
+        else
+          res.json({ success: true })
 
   @get '/accounts/terms', auth, (req, res, next) ->
     retArr = []

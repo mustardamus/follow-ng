@@ -19,10 +19,18 @@
           </h2>
 
           <form class="ui form settings">
+            <div class="ui message success">
+              Settings successfully saved.
+            </div>
+
+            <div class="ui message error">
+              Settings successfully failed.
+            </div>
+
             <div class="ui segment">
               <div class="field">
                 <div class="ui toggle checkbox">
-                  <input type="checkbox" id="unfollowInitialFriends" name="unfollowInitialFriends" class="hidden">
+                  <input type="checkbox" id="unfollowInitialFriends" name="unfollowInitialFriends" class="hidden" checked="{{ settings.unfollowInitialFriends ? 'checked' : '' }}">
                   <label for="unfollowInitialFriends">Unfollow Initial/Self-Added Friends</label>
                 </div>
 
