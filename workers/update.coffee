@@ -9,12 +9,12 @@ module.exports = class UpdateWorker
     @rateLimitExceeded = false
 
     @twit.get 'followers/ids', { screen_name: @account.info.screen_name }, (err, data, response) =>
-      return @log('error', "GET followers/ids: #{err.message}") if(err)
+      return @log('error', "GET followers/ids: #{err.message}", err) if(err)
 
       @followerIds = data.ids
 
       @twit.get 'friends/ids', { screen_name: @account.info.screen_name }, (err, data, response) =>
-        return @log('error', "GET friends/ids: #{err.message}") if(err)
+        return @log('error', "GET friends/ids: #{err.message}", err) if(err)
         @friendIds = data.ids
 
         @processIds()

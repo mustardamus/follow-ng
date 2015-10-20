@@ -15,7 +15,7 @@ module.exports = class SearchWorker
     searchObj = { q: term.term, count: 100, since_id: term.since_id_str }
 
     @twit.get 'search/tweets', searchObj, (err, data, response) =>
-      return @log('error', err.message) if(err)
+      return @log('error', err.message, err) if(err)
 
       term.update { since_id_str: data.search_metadata.max_id_str }, (err) ->
         @log('error', 'saving since_id', err) if(err)
