@@ -34,6 +34,9 @@ module.exports =
       @numbersRequest()
       @friendsRequest()
 
+    @$watch 'mode', ->
+      @friendsRequest()
+
   methods:
     accountsRequest: ->
       $.ajax
@@ -46,9 +49,6 @@ module.exports =
     onAccountsSuccess: (accounts) ->
       @$root.$data.accounts = accounts
       @$data.accountId      = accounts[0]._id
-
-      @numbersRequest()
-      @friendsRequest()
 
     onAccountsError: (res) ->
       console.log 'error', res
@@ -103,7 +103,6 @@ module.exports =
     onMenuItemClick: (e) ->
       @$data.mode        = $(e.toElement).data('mode')
       @$data.currentPage = 1
-      @friendsRequest()
 
     onAccountClick: (e) ->
       @$data.accountId = e.targetVM.$data._id
