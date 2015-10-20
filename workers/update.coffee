@@ -9,11 +9,12 @@ module.exports = class UpdateWorker
     @rateLimitExceeded = false
 
     @twit.get 'followers/ids', { screen_name: @account.info.screen_name }, (err, data, response) =>
-      return @log('Error receiving follower ids - ', err.message) if(err)
+      return @log('error', "GET followers/ids: #{err.message}") if(err)
+
       @followerIds = data.ids
 
       @twit.get 'friends/ids', { screen_name: @account.info.screen_name }, (err, data, response) =>
-        return @log('Error receiving friends ids - ', err.message) if(err)
+        return @log('error', "GET friends/ids: #{err.message}") if(err)
         @friendIds = data.ids
 
         @processIds()
@@ -51,21 +52,21 @@ module.exports = class UpdateWorker
 
   insertFriend: (userId, extendObj) ->
     @models.friend.findOne { accountId: @account._id, userId: @account.userId, 'info.id': userId }, (err, friend) =>
-      return @log('error finding friend') if(err)
+      return @log('error', 'finding friend', err) if(err)
 
       if friend
         friend.update extendObj, (err) =>
           if err
-            @log 'error updating friend', err
+            @log 'error', 'updating friend', err
           else
-            @log "Updated friend #{friend.info.screen_name} for account #{@account.info.screen_name}."
+            @log 'info', "Updated friend @#{friend.info.screen_name}", extendObj
       else
         return if(@rateLimitExceeded)
 
         @twit.get 'users/show', { user_id: userId }, (err, data, response) =>
           if err
             @rateLimitExceeded = true if(err.code is 88)
-            @log('error receiving user data - ', err.message) if(err)
+            @log('error', err.message) if(err)
             return
 
           data =
@@ -81,6 +82,6 @@ module.exports = class UpdateWorker
 
           friend.save (err) =>
             if err
-              @log 'error saving friend', err
+              @log 'error', 'saving friend', err
             else
-              @log "Saved friend #{friend.info.screen_name} for account #{@account.info.screen_name}."
+              @log 'info', "Saved friend @#{friend.info.screen_name}", extendObj

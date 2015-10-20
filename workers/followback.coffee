@@ -12,17 +12,17 @@ module.exports = class FollowbackWorker
       backfollowed: true
 
     @models.friend.find findObj, (err, friends) =>
-      return @log('error finding friends for account', err) if(err)
+      return @log('error', 'finding friends for account', err) if(err)
 
       for friend in friends
         @processFriend friend
 
   processFriend: (friend) ->
     @twit.post 'friendships/create', { screen_name: friend.info.screen_name }, (err, data, result) =>
-      return @log('error following friend', err) if(err)
+      return @log('error', err.message) if(err)
 
       friend.update { followed: true }, (err) =>
         if err
-          @log 'error updating friend model', err
+          @log 'error', 'updating friend model', err
         else
-          @log "Backfolloweed #{friend.info.screen_name} for account #{@account.info.screen_name}..."
+          @log 'info', "Backfollowed #{friend.info.screen_name} for account #{@account.info.screen_name}..."

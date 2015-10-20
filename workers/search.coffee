@@ -6,7 +6,7 @@ module.exports = class SearchWorker
     @modelName  = 'term'
 
     @models.term.find { accountId: @account._id }, (err, terms) =>
-      return @log("Error finding terms for account #{@account.info.screen_name}", err) if err
+      return @log('error', "finding terms for account #{@account.info.screen_name}", err) if(err)
 
       for term in terms
         @processTerm term
@@ -15,10 +15,10 @@ module.exports = class SearchWorker
     searchObj = { q: term.term, count: 100, since_id: term.since_id_str }
 
     @twit.get 'search/tweets', searchObj, (err, data, response) =>
-      return @log("Error searching Twitter", { screen_name: @account.info.screen_name, term: term.term }) if(err)
+      return @log('error', err.message) if(err)
 
       term.update { since_id_str: data.search_metadata.max_id_str }, (err) ->
-        @log('Error saving since_id') if(err)
+        @log('error', 'saving since_id', err) if(err)
 
       usernamesArr    = []
       uniqueStatusArr = []
@@ -38,7 +38,7 @@ module.exports = class SearchWorker
     findObj  = { userId: @account.userId, accountId: @account._id, 'info.screen_name': userInfo.screen_name }
 
     @models.friend.count findObj, (err, count) =>
-      return @log("Error counting friend models") if(err)
+      return @log('error', 'counting friend models', err) if(err)
       return if(count isnt 0) # already in db
 
       friend = new @models.friend
@@ -54,6 +54,6 @@ module.exports = class SearchWorker
 
       friend.save (err) =>
         if(err)
-          @log 'Error saving friend', friend.info.screen_name
+          @log 'error', 'saving friend', err
         else
-          @log 'Saved potential friend', friend.info.screen_name, 'for account', @account.info.screen_name, 'with term', term.term
+          @log 'info', "Saved potential friend @#{friend.info.screen_name} with term '#{term.term}'"

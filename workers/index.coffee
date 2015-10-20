@@ -2,6 +2,8 @@ fs       = require('fs')
 mongoose = require('mongoose')
 argv     = require('yargs').argv
 Twit     = require('twit')
+log      = require('npmlog')
+moment   = require('moment')
 config   = require('../server/config')
 
 unless argv.worker
@@ -44,13 +46,22 @@ db.once 'open', ->
   console.log "Connected to database #{config.database.url}..."
 
   Worker     = require("./#{argv.worker}")
-  logFunc    = (args...) -> console.log(args)
   workerCall = ->
     models.account.find {}, (err, accounts) ->
       return console.log('Error finding accounts', err) if(err)
 
       for account in accounts
         do (account) ->
+          logFunc = (level, message, additional) ->
+            time   = moment().format('HH:mm:ss')
+            worker = argv.worker.toUpperCase()
+            prefix = "#{time} - #{worker} (@#{account.info.screen_name}):"
+
+            if additional
+              log[level](prefix, message, additional)
+            else
+              log[level](prefix, message)
+
           twit = new Twit
             consumer_key:        config.twitter.consumerKey
             consumer_secret:     config.twitter.consumerSecret
