@@ -22,6 +22,39 @@
           <div class="ui label {{ mode === 'potentialfriends' ? 'teal' : ''}}">{{numbers.potentialfriends}}</div>
         </a>
       </div>
+
+      <div class="ui message">
+        <div class="content">
+          <div class="header">
+            <span v-if="mode === 'followback'">Follow Back?</span>
+            <span v-if="mode === 'followers'">Followers?</span>
+            <span v-if="mode === 'friends'">Friends?</span>
+            <span v-if="mode === 'potentialfriends'">Potential Friends?</span>
+          </div>
+
+          <p v-if="mode === 'followback'">
+            Congratulations! The circle is complete. These are Friends who
+            follow you, and you follow them.
+          </p>
+
+          <p v-if="mode === 'followers'">
+            These Friends follow you, but you don't follow them back. But no
+            worries, Follow-ng will follow them back in the future.
+          </p>
+
+          <p v-if="mode === 'friends'">
+            You follow these Friends, but they are not following you back.
+            Follow-ng will give them some time to follow you back, otherwise
+            they will be unfollowed and not followed again in the future.
+          </p>
+
+          <p v-if="mode === 'potentialfriends'">
+            You have no Friendship with these people yet. Follow-ng will follow
+            some of them every now and then, and see if they are following you
+            back.
+          </p>
+        </div>
+      </div>
     </div>
 
     <div class="twelve wide column">
