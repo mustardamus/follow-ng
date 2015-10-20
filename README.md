@@ -42,6 +42,20 @@ into Followback (Account follows Friend, Friend follows Account), Followers and
 Friends. Then it checks if the Friend is already in the Database, if not it
 fetches the information from Twitter and stores it in the database.
 
+### Followback Worker
+
+This worker finds all friends that are following the account but the account
+does not follow them yet. It follows them and updates the field on the model.
+Easy peasy.
+
+### Unfollow Worker
+
+This worker finds all friends that are followed but didn't follow back. It
+checks the date when the following happened, and if the time between now and the
+following is greater than the one specified in the config, and the friend is
+allowed to unfollow (TODO: more info) he/she is unfollowed and the unfollowed
+field on the model is set to true.
+
 ## Application Stack
 
 This environment is intended to be used in a modular way. Everything is a

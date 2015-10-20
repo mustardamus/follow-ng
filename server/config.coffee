@@ -40,3 +40,4 @@ module.exports =
       search:     15
       update:     15
       followback: 15
+      unfollow:   15

@@ -1,5 +1,3 @@
-_ = require('lodash')
-
 module.exports = class FollowbackWorker
   constructor: (@config, @models, @helpers, @account, @log, @twit) ->
     @workerName = 'search'
