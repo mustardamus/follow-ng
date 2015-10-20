@@ -1,18 +1,31 @@
+_ = require('lodash')
+
 module.exports = (config, helpers, io, models) ->
   auth = require('../middleware/auth')(config, helpers, models)
 
   @get '/friends', auth, (req, res, next) ->
-    limit  = 80
-    page   = ((req.query.page or 1) - 1) * limit # turn page 1 into 0 based
-    retObj =
+    limit   = 80
+    page    = ((req.query.page or 1) - 1) * limit # turn page 1 into 0 based
+    findObj = { userId: req.user._id }
+    retObj  =
       'info.profile_image_url': 1
       'info.screen_name': 1
 
-    models.friend.count (err, count) ->
+    switch req.query.mode
+      when 'followback'
+        _.extend(findObj, { followed: true, backfollowed: true })
+      when 'followers'
+        _.extend(findObj, { followed: false, backfollowed: true })
+      when 'friends'
+        _.extend(findObj, { followed: true, backfollowed: false })
+      when 'potentialfriends'
+        _.extend(findObj, { followed: false, backfollowed: false })
+
+    models.friend.count findObj, (err, count) ->
       return next(err) if(err)
 
       models.friend
-        .find({ userId: req.user._id }, retObj)
+        .find(findObj, retObj)
         .skip(page).limit(limit)
         .exec (err, friends) ->
           return next(err) if(err)

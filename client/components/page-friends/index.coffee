@@ -7,6 +7,7 @@ module.exports =
     currentPage: 1
     totalPages:  1
     loading:     false
+    mode:        'followback' # followers | friends | potentialfriends
 
   ready: ->
     if @$root.$data.loggedIn
@@ -26,7 +27,7 @@ module.exports =
         url:      '/friends'
         type:     'GET'
         dataType: 'json'
-        data:     { page: @$data.currentPage }
+        data:     { page: @$data.currentPage, mode: @$data.mode }
         success:  @onFriendsSuccess
         error:    @onFriendsError
 
@@ -50,3 +51,9 @@ module.exports =
     onNextPageClick: ->
       if @$data.currentPage + 1 <= @$data.totalPages
         @$data.currentPage++
+
+    onMenuItemClick: (e) ->
+      @$data.mode        = $(e.toElement).data('mode')
+      @$data.currentPage = 1
+      
+      @friendsRequest()
