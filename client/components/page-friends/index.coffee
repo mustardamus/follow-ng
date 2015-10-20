@@ -10,6 +10,7 @@ module.exports =
     mode:        'followback' # followers | friends | potentialfriends
     numbers:     { followback: 0, followers: 0, friends: 0, potentialfriends: 0 }
     accounts:    []
+    accountId:   '' # which account query the friends for
 
   ready: ->
     if @$root.$data.loggedIn
@@ -24,8 +25,6 @@ module.exports =
   methods:
     startRequests: ->
       @accountsRequest()
-      @numbersRequest()
-      @friendsRequest()
 
     accountsRequest: ->
       $.ajax
@@ -36,7 +35,15 @@ module.exports =
         error:    @onAccountsError
 
     onAccountsSuccess: (accounts) ->
-      @$data.accounts = accounts
+      @$data.accounts  = accounts
+      @$data.accountId = accounts[0]._id
+
+      @numbersRequest()
+      @friendsRequest()
+
+      setTimeout =>
+        $('.menu.accounts .item', @$el).first().addClass 'active teal'
+      , 50
 
     onAccountsError: (res) ->
       console.log 'error', res
@@ -46,6 +53,7 @@ module.exports =
         url:      '/friends/numbers'
         type:     'GET'
         dataType: 'json'
+        data:     { accountId: @$data.accountId }
         success:  @onNumbersSuccess
         error:    @onNumbersError
 
@@ -62,7 +70,7 @@ module.exports =
         url:      '/friends'
         type:     'GET'
         dataType: 'json'
-        data:     { page: @$data.currentPage, mode: @$data.mode }
+        data:     { page: @$data.currentPage, mode: @$data.mode, accountId: @$data.accountId }
         success:  @onFriendsSuccess
         error:    @onFriendsError
 
@@ -90,7 +98,6 @@ module.exports =
     onMenuItemClick: (e) ->
       @$data.mode        = $(e.toElement).data('mode')
       @$data.currentPage = 1
-
       @friendsRequest()
 
     onAccountClick: (e) ->
@@ -100,3 +107,8 @@ module.exports =
 
       $('.menu.accounts .active.teal', @$el).removeClass 'active teal'
       el.addClass 'active teal'
+
+      @$data.accountId = vm.$data._id
+
+      @numbersRequest()
+      @friendsRequest()

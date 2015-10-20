@@ -6,6 +6,7 @@ module.exports = (config, helpers, io, models) ->
   @get '/friends/numbers', auth, (req, res, next) ->
     retObj = {}
     toGo   = 4
+    accObj = { userId: req.user._id, accountId: req.query.accountId }
     obj    =
       followback:       { followed: true, backfollowed: true }
       followers:        { followed: false, backfollowed: true }
@@ -14,7 +15,7 @@ module.exports = (config, helpers, io, models) ->
 
     for mode, findObj of obj
       do (mode, findObj) ->
-        models.friend.count _.extend({ userId: req.user._id}, findObj), (err, count) ->
+        models.friend.count _.extend(accObj, findObj), (err, count) ->
           return next(err) if(err)
           retObj[mode] = count
           toGo--
@@ -23,7 +24,7 @@ module.exports = (config, helpers, io, models) ->
   @get '/friends', auth, (req, res, next) ->
     limit   = 80
     page    = ((req.query.page or 1) - 1) * limit # turn page 1 into 0 based
-    findObj = { userId: req.user._id }
+    findObj = { userId: req.user._id, accountId: req.query.accountId }
     retObj  =
       'info.profile_image_url': 1
       'info.screen_name': 1
