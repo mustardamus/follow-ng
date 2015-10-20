@@ -18,4 +18,11 @@ module.exports = class FollowbackWorker
         @processFriend friend
 
   processFriend: (friend) ->
-    console.log friend
+    @twit.post 'friendships/create', { screen_name: friend.info.screen_name }, (err, data, result) =>
+      return @log('error following friend', err) if(err)
+
+      friend.update { followed: true }, (err) =>
+        if err
+          @log 'error updating friend model', err
+        else
+          @log "Backfolloweed #{friend.info.screen_name} for account #{@account.info.screen_name}..."
