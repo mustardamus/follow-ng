@@ -25,6 +25,12 @@ module.exports = (config, helpers, io, models) ->
         settings[setName] = false if(setVal is 'false')
         settings[setName] = +setVal unless isNaN(setVal)
 
+    if settings.maxFollowsPerDay and settings.maxFollowsPerDay > config.account.defaultSettings.maxFollowsPerDay
+      return res.status(403).json({ success: false })
+
+    if settings.maxUnfollowsPerDay and settings.maxUnfollowsPerDay > config.account.defaultSettings.maxUnfollowsPerDay
+      return res.status(403).json({ success: false })
+
     models.account.findOne { _id: accountId, userId: req.user._id }, (err, account) ->
       return res.status(403).json({ success: false }) if(err)
       return res.status(404).json({ success: false }) unless(account)
