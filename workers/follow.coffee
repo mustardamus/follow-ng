@@ -10,6 +10,7 @@ module.exports = class FollowWorker
     findObj = # all friends that follow the account but the account dont follow them
       accountId:    @account._id
       userId:       @account.userId
+      sourceWorker: 'search'
       followed:     false
       backfollowed: false
       unfollowed:   false

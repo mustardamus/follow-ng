@@ -52,9 +52,14 @@ Easy peasy.
 
 This worker finds all friends that are followed but didn't follow back. It
 checks the date when the following happened, and if the time between now and the
-following is greater than the one specified in the config, and the friend is
-allowed to unfollow (TODO: more info) he/she is unfollowed and the unfollowed
-field on the model is set to true.
+following is greater than the one specified in the settings, and the friend is
+unfollowed and the unfollowed field on the model is set to true.
+
+### Follow Worker
+
+This worker will find every potential friend added by the Search Worker and
+randomly follow people. The followed field, as well as the time when the
+follow has happened, is set.
 
 ## Application Stack
 
