@@ -56,6 +56,8 @@ module.exports = (config, helpers, io, models) ->
             accessToken:       accessToken
             accessTokenSecret: accessTokenSecret
             info:              data
+            settings:
+              unfollowInitialFriends: false
 
           account.save (err) ->
             return next(err) if(err)

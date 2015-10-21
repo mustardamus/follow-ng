@@ -6,8 +6,11 @@
       <a href="/#/register" class="item {{currentPage === 'register' ? 'active' : ''}}" v-if="!loggedIn">Register</a>
       <a href="/#/accounts" class="item {{currentPage === 'accounts' ? 'active' : ''}}" v-if="loggedIn">Accounts</a>
       <a href="/#/friends" class="item {{currentPage === 'friends' ? 'active' : ''}}" v-if="loggedIn">Friends</a>
-      <a href="/#/user" class="item {{currentPage === 'user' ? 'active' : ''}}" v-if="loggedIn">Hello, {{currentUser.username}}!</a>
-      <a href="/#/logout" class="item" v-if="loggedIn">Logout</a>
+
+      <div class="right menu">
+        <a href="/#/user" class="item {{currentPage === 'user' ? 'active' : ''}}" v-if="loggedIn">Hello, {{currentUser.username}}!</a>
+        <a href="/#/logout" class="item" v-if="loggedIn">Logout</a>
+      </div>
     </div>
   </div>
 

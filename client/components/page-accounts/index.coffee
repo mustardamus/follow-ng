@@ -5,9 +5,7 @@ module.exports =
   data: ->
     accounts:  @$root.$data.accounts
     accountId: if @$root.$data.accounts[0] then @$root.$data.accounts[0].id else ''
-    settingsDefault:
-      unfollowInitialFriends: false
-    settings: @$data.settingsDefault
+    settings:  if @$root.$data.accounts[0] then @$root.$data.accounts[0].settings else {}
 
   ready: ->
     if @$root.$data.loggedIn and @$data.accounts.length is 0
