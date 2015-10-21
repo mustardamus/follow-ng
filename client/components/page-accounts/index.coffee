@@ -7,6 +7,8 @@ module.exports =
     accountId: if @$root.$data.accounts[0] then @$root.$data.accounts[0].id else ''
     settingsDefault:
       unfollowInitialFriends: false
+      maxFollowsPerDay:       100
+      maxUnfollowsPerDay:     100
     settings: if @$root.$data.accounts[0] then @$root.$data.accounts[0].settings else @$data.settingsDefault
 
   ready: ->

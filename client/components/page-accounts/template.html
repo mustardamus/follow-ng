@@ -46,6 +46,30 @@
               </div>
             </div>
 
+            <div class="ui segment">
+              <div class="two fields">
+                <div class="field">
+                  <label for="maxFollowsPerDay">Maximum Follows per Day</label>
+                  <input type="text" id="maxFollowsPerDay" name="maxFollowsPerDay" placeholder="100" value="{{settings.maxFollowsPerDay ? settings.maxFollowsPerDay : settingsDefault.maxFollowsPerDay}}">
+                </div>
+
+                <div class="field">
+                  <label for="maxUnfollowsPerDay">Maximum Unfollows per Day</label>
+                  <input type="text" id="maxUnfollowsPerDay" name="maxUnfollowsPerDay" placeholder="100" value="{{settings.maxUnfollowsPerDay ? settings.maxUnfollowsPerDay : settingsDefault.maxUnfollowsPerDay}}">
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="ui message">
+                  <p>
+                    The limit on how many friends can be followed or unfollowed
+                    per day. Remember, it's about smart following, not
+                    brute-force. Can be <strong>0-500</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <div class="field submit">
               <input class="ui button" type="submit" value="Save Settings" v-on="click:onSaveSettingsClick">
             </div>
