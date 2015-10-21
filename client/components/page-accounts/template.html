@@ -70,6 +70,18 @@
               </div>
             </div>
 
+            <div class="ui segment">
+              <div class="field">
+                <label for="refollowPeriodDay">Refollow Period in Days</label>
+                <input type="text" id="refollowPeriodDay" name="refollowPeriodDay" placeholder="5" value="{{settings.refollowPeriodDay ? settings.refollowPeriodDay : settingsDefault.refollowPeriodDay}}">
+              </div>
+
+              <div class="ui message">
+                How man days you will give followed friends to follow you back
+                before you unfollow them again.
+              </div>
+            </div>
+
             <div class="field submit">
               <input class="ui button" type="submit" value="Save Settings" v-on="click:onSaveSettingsClick">
             </div>

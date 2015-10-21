@@ -9,6 +9,7 @@ module.exports =
       unfollowInitialFriends: false
       maxFollowsPerDay:       500
       maxUnfollowsPerDay:     500
+      refollowPeriodDay:      5
     settings: if @$root.$data.accounts[0] then @$root.$data.accounts[0].settings else @$data.settingsDefault
 
   ready: ->
@@ -87,6 +88,7 @@ module.exports =
         unfollowInitialFriends: $('#unfollowInitialFriends', @$el).is(':checked')
         maxFollowsPerDay:       $('#maxFollowsPerDay', @$el).val()
         maxUnfollowsPerDay:     $('#maxUnfollowsPerDay', @$el).val()
+        refollowPeriodDay:      $('#refollowPeriodDay', @$el).val()
 
       $.ajax
         url:      '/accounts/settings'
@@ -112,6 +114,8 @@ module.exports =
       maxFollowsVal   = maxFollowsEl.val()
       maxUnfollowsEl  = $('#maxUnfollowsPerDay', @$el)
       maxUnfollowsVal = maxUnfollowsEl.val()
+      refollowEl      = $('#refollowPeriodDay', @$el)
+      refollowVal     = refollowEl.val()
 
       if maxFollowsVal.length is 0 or isNaN(maxFollowsVal) or +maxFollowsVal < 0 or +maxFollowsVal > @$data.settingsDefault.maxFollowsPerDay
         maxFollowsEl.parent().addClass 'error'
@@ -119,6 +123,10 @@ module.exports =
 
       if maxUnfollowsVal.length is 0 or isNaN(maxUnfollowsVal) or +maxUnfollowsVal < 0 or +maxUnfollowsVal > @$data.settingsDefault.maxUnfollowsPerDay
         maxUnfollowsEl.parent().addClass 'error'
+        valid = false
+
+      if refollowVal.length is 0 or isNaN(refollowVal) or +refollowVal < 0
+        refollowEl.parent().addClass 'error'
         valid = false
 
       if valid

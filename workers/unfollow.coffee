@@ -23,7 +23,7 @@ module.exports = class UnfollowWorker
             return # dont unfollow initial/self-added friends
 
           now       = moment().unix()
-          checkDate = moment(friend.followedDate).add(5, 'days').unix()
+          checkDate = moment(friend.followedDate).add(@account.settings.refollowPeriodDay, 'days').unix()
 
           if friend.followedDate and now < checkDate
             @log 'warn', "Still in refollow period, @#{friend.info.screen_name}"

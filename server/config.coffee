@@ -48,3 +48,4 @@ module.exports =
       unfollowInitialFriends: false
       maxFollowsPerDay:       500
       maxUnfollowsPerDay:     500
+      refollowPeriodDay:      5
