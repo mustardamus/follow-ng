@@ -11,6 +11,7 @@ module.exports = class UnfollowWorker
       userId:       @account.userId
       followed:     true
       backfollowed: false
+      unfollowed:   false
 
     @models.friend.find findObj, (err, friends) =>
       return @log('error', 'finding friends for account', err) if(err)
