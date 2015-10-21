@@ -1,5 +1,3 @@
-_ = require('lodash')
-
 module.exports =
   replace:  true
   template: require('./template')
@@ -87,8 +85,8 @@ module.exports =
       @$data.settings =
         accountId:              @$data.accountId
         unfollowInitialFriends: $('#unfollowInitialFriends', @$el).is(':checked')
-        maxFollowsPerDay:       +$('#maxFollowsPerDay', @$el).val()
-        maxUnfollowsPerDay:     +$('#maxUnfollowsPerDay', @$el).val()
+        maxFollowsPerDay:       $('#maxFollowsPerDay', @$el).val()
+        maxUnfollowsPerDay:     $('#maxUnfollowsPerDay', @$el).val()
 
       $.ajax
         url:      '/accounts/settings'

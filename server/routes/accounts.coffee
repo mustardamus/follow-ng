@@ -23,6 +23,7 @@ module.exports = (config, helpers, io, models) ->
       if typeof setVal is 'string'
         settings[setName] = true if(setVal is 'true')
         settings[setName] = false if(setVal is 'false')
+        settings[setName] = +setVal unless isNaN(setVal)
 
     models.account.findOne { _id: accountId, userId: req.user._id }, (err, account) ->
       return res.status(403).json({ success: false }) if(err)
