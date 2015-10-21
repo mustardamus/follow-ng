@@ -1,3 +1,5 @@
+_ = require('lodash')
+
 module.exports =
   replace:  true
   template: require('./template')
@@ -78,13 +80,15 @@ module.exports =
       e.preventDefault()
 
     saveSettingsRequest: ->
+      return unless @validateSettingsForm()
+
       $('.form.settings', @$el).addClass 'loading'
 
       @$data.settings =
         accountId:              @$data.accountId
         unfollowInitialFriends: $('#unfollowInitialFriends', @$el).is(':checked')
-        maxFollowsPerDay:       $('#maxFollowsPerDay', @$el).val()
-        maxUnfollowsPerDay:     $('#maxUnfollowsPerDay', @$el).val()
+        maxFollowsPerDay:       +$('#maxFollowsPerDay', @$el).val()
+        maxUnfollowsPerDay:     +$('#maxUnfollowsPerDay', @$el).val()
 
       $.ajax
         url:      '/accounts/settings'
@@ -103,6 +107,26 @@ module.exports =
       $('.form.settings', @$el)
         .addClass('error')
         .removeClass('loading')
+
+    validateSettingsForm: ->
+      valid           = true
+      maxFollowsEl    = $('#maxFollowsPerDay', @$el)
+      maxFollowsVal   = maxFollowsEl.val()
+      maxUnfollowsEl  = $('#maxUnfollowsPerDay', @$el)
+      maxUnfollowsVal = maxUnfollowsEl.val()
+
+      if maxFollowsVal.length is 0 or isNaN(maxFollowsVal) or +maxFollowsVal < 0 or +maxFollowsVal > @$data.settingsDefault.maxFollowsPerDay
+        maxFollowsEl.parent().addClass 'error'
+        valid = false
+
+      if maxUnfollowsVal.length is 0 or isNaN(maxUnfollowsVal) or +maxUnfollowsVal < 0 or +maxUnfollowsVal > @$data.settingsDefault.maxUnfollowsPerDay
+        maxUnfollowsEl.parent().addClass 'error'
+        valid = false
+
+      if valid
+        $('.form.settings .field.error', @$el).removeClass 'error'
+
+      valid
 
     onRemoveSearchTermClick: (e) ->
       vm       = e.targetVM
