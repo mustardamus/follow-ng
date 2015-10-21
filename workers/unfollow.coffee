@@ -1,4 +1,5 @@
-async = require('async')
+async  = require('async')
+moment = require('moment')
 
 module.exports = class UnfollowWorker
   constructor: (@config, @models, @helpers, @account, @log, @twit) ->
@@ -18,7 +19,15 @@ module.exports = class UnfollowWorker
       for friend in friends
         do (friend) =>
           if friend.sourceWorker is 'update' and !@account.settings.unfollowInitialFriends
+            @log 'warn', "Not allowed to unfollow initital friends, @#{friend.info.screen_name}"
             return # dont unfollow initial/self-added friends
+
+          now       = moment().unix()
+          checkDate = moment(friend.followedDate).add(5, 'days').unix()
+
+          if friend.followedDate and now < checkDate
+            @log 'warn', "Still in refollow period, @#{friend.info.screen_name}"
+            return # dont unfollow if still in refollow period
 
           funcsArr.push (cb) =>
             @processFriend friend, cb
