@@ -3,7 +3,6 @@ async = require('async')
 module.exports = class UnfollowWorker
   constructor: (@config, @models, @helpers, @account, @log, @twit) ->
     @workerName = 'unfollow'
-    @modelName  = null
     funcsArr    = []
 
     findObj = # all friends that dont follow the account but the account follows them
@@ -20,7 +19,7 @@ module.exports = class UnfollowWorker
         do (friend) =>
           # check if worker is update
           # check if setting allows to unfollow
-          
+
           funcsArr.push (cb) =>
             @processFriend friend, cb
 

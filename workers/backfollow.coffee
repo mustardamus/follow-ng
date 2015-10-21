@@ -1,9 +1,8 @@
 async = require('async')
 
-module.exports = class FollowbackWorker
+module.exports = class BackfollowWorker
   constructor: (@config, @models, @helpers, @account, @log, @twit) ->
-    @workerName = 'search'
-    @modelName  = 'term'
+    @workerName = 'backfollow'
     funcsArr    = []
 
     findObj = # all friends that follow the account but the account dont follow them
