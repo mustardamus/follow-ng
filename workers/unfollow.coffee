@@ -1,10 +1,10 @@
-_      = require('lodash')
-moment = require('moment')
+async = require('async')
 
 module.exports = class UnfollowWorker
   constructor: (@config, @models, @helpers, @account, @log, @twit) ->
-    @workerName        = 'unfollow'
-    @modelName         = null
+    @workerName = 'unfollow'
+    @modelName  = null
+    funcsArr    = []
 
     findObj = # all friends that dont follow the account but the account follows them
       accountId:    @account._id
@@ -16,7 +16,32 @@ module.exports = class UnfollowWorker
       return @log('error', 'finding friends for account', err) if(err)
 
       for friend in friends
-        @processFriend friend
+        do (friend) =>
+          funcsArr.push (cb) =>
+            @processFriend friend, cb
 
-  processFriend: (friend) ->
-    @log 'info', friend.info.screen_name
+      async.series funcsArr
+
+  processFriend: (friend, cb) ->
+    if @account.hits.unfollows >= @account.settings.maxUnfollowsPerDay
+      @log 'warn', 'Limit for daily unfollows reached'
+      return cb(null)
+
+    @twit.post 'friendships/destroy', { screen_name: friend.info.screen_name }, (err, data, response) =>
+      @account.update { $inc: { 'hits.unfollows': 1 }}, (error) =>
+        if(error)
+          @log('error', 'Updating unfollow hit', error)
+        else
+          @account.hits.unfollows++
+
+      if err
+        @log('error', err.message, err)
+        return cb(null)
+
+      friend.update { unfollowed: true }, (error) =>
+        if error
+          @log 'error', 'Saving unfollowed to friend', error
+        else
+          @log 'info', "Unfollowed @#{friend.info.screen_name}"
+
+        return cb(null)
