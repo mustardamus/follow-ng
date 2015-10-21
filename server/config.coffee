@@ -41,6 +41,7 @@ module.exports =
       update:     15
       followback: 15
       unfollow:   15
+      follow:     15
 
   account:
     defaultSettings:

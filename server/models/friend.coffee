@@ -9,6 +9,7 @@ module.exports = (helpers) ->
     followed:     Boolean           # has the friend been already followed
     unfollowed:   Boolean           # has the fiend been followed, and then unfollowed
     backfollowed: Boolean           # account is following friend, friend is following account
+    followedDate: Date              # when was the account followed
   ,
     timestamps: true
 
