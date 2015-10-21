@@ -57,6 +57,7 @@ module.exports = (config, helpers, io, models) ->
             accessTokenSecret: accessTokenSecret
             info:              data
             settings:          config.account.defaultSettings
+            hits:              { follows: 0, unfollows: 0 }
 
           account.save (err) ->
             return next(err) if(err)

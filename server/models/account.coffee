@@ -8,6 +8,9 @@ module.exports = (helpers) ->
     # unfollowInitialFriends: Boolean    # unfollow friends that were there before using follow-ng
     # maxFollowsPerDay:       Number     # how many people to follow per day
     # maxUnfollowsPerDay:     Number     # how many friends to unfollow per day
+    hits:              Object            # monitor the follows and unfollows
+    # follows:   Number                  # how many follow requests has been sent
+    # unfollows: Number                  # how many unfollow requests has been sent
   ,
     timestamps: true
 
