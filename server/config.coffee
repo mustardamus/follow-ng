@@ -41,3 +41,9 @@ module.exports =
       update:     15
       followback: 15
       unfollow:   15
+
+  account:
+    defaultSettings:
+      unfollowInitialFriends: false
+      maxFollowsPerDay:       500
+      maxUnfollowsPerDay:     500
