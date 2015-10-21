@@ -17,8 +17,8 @@ module.exports = class UnfollowWorker
 
       for friend in friends
         do (friend) =>
-          # check if worker is update
-          # check if setting allows to unfollow
+          if friend.sourceWorker is 'update' and !@account.settings.unfollowInitialFriends
+            return # dont unfollow initial/self-added friends
 
           funcsArr.push (cb) =>
             @processFriend friend, cb
