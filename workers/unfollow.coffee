@@ -18,6 +18,9 @@ module.exports = class UnfollowWorker
 
       for friend in friends
         do (friend) =>
+          # check if worker is update
+          # check if setting allows to unfollow
+          
           funcsArr.push (cb) =>
             @processFriend friend, cb
 
