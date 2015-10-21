@@ -5,7 +5,9 @@ module.exports =
   data: ->
     accounts:  @$root.$data.accounts
     accountId: if @$root.$data.accounts[0] then @$root.$data.accounts[0].id else ''
-    settings:  if @$root.$data.accounts[0] then @$root.$data.accounts[0].settings else {}
+    settingsDefault:
+      unfollowInitialFriends: false
+    settings: if @$root.$data.accounts[0] then @$root.$data.accounts[0].settings else @$data.settingsDefault
 
   ready: ->
     if @$root.$data.loggedIn and @$data.accounts.length is 0
@@ -20,6 +22,17 @@ module.exports =
 
     @$watch 'accountId', (id) ->
       $('.form.settings', @$el).removeClass 'success error'
+
+      for account in @$root.accounts
+        if account.id is @$data.accountId
+          @$data.settings = account.settings
+          break
+
+    @$watch 'settings', (settings) ->
+      for account in @$root.accounts
+        if account.id is @$data.accountId
+          account.settings = settings
+          break
 
     $('.ui.checkbox', @$el).checkbox()
 
@@ -65,7 +78,7 @@ module.exports =
     saveSettingsRequest: ->
       $('.form.settings', @$el).addClass 'loading'
 
-      data =
+      @$data.settings =
         accountId:              @$data.accountId
         unfollowInitialFriends: $('#unfollowInitialFriends', @$el).is(':checked')
 
@@ -73,7 +86,7 @@ module.exports =
         url:      '/accounts/settings'
         type:     'POST'
         dataType: 'json'
-        data:     data
+        data:     @$data.settings
         success:  @onSaveSettingsSuccess
         error:    @onSaveSettingsError
 
