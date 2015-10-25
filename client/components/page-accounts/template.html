@@ -1,0 +1,99 @@
+<div class="page-accounts">
+  <div class="ui grid">
+    <div class="four wide column">
+      <a v-on="click:onAddAccountClick" class="ui button primary add-account" id="add">Add Twitter Account</a>
+
+      <div class="ui vertical pointing menu accounts">
+        <a v-repeat="accounts" v-on="click:onAccountClick" class="item {{ id === accountId ? 'active teal' : '' }}">
+          <img class="ui bordered rounded image" v-attr="src:info.profile_image_url">
+          @{{info.screen_name}}
+        </a>
+      </div>
+    </div>
+
+    <div class="twelve wide column">
+      <div class="ui grid">
+        <div class="eight wide column">
+          <h2 class="ui center aligned header">
+            <i class="settings icon disabled"></i> Account Settings
+          </h2>
+
+          <form class="ui form settings">
+            <div class="ui message success">
+              Settings successfully saved.
+            </div>
+
+            <div class="ui message error">
+              Settings successfully failed.
+            </div>
+
+            <div class="ui segment">
+              <div class="field">
+                <div class="ui toggle checkbox">
+                  <input type="checkbox" id="unfollowInitialFriends" name="unfollowInitialFriends" class="hidden" checked="{{ settings.unfollowInitialFriends ? 'checked' : '' }}">
+                  <label for="unfollowInitialFriends">Unfollow Initial/Self-Added Friends</label>
+                </div>
+
+                <div class="ui message">
+                  <p>
+                    Allow to unfollow friends who don't follow you back that:
+                  </p>
+                  <ul>
+                    <li>Existed before you began to use Follow-ng</li>
+                    <li>You start following outside of Follow-ng</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="ui segment">
+              <div class="two fields">
+                <div class="field">
+                  <label for="maxFollowsPerDay">Maximum Follows per Day</label>
+                  <input type="text" id="maxFollowsPerDay" name="maxFollowsPerDay" placeholder="100" value="{{settings.maxFollowsPerDay ? settings.maxFollowsPerDay : settingsDefault.maxFollowsPerDay}}">
+                </div>
+
+                <div class="field">
+                  <label for="maxUnfollowsPerDay">Maximum Unfollows per Day</label>
+                  <input type="text" id="maxUnfollowsPerDay" name="maxUnfollowsPerDay" placeholder="100" value="{{settings.maxUnfollowsPerDay ? settings.maxUnfollowsPerDay : settingsDefault.maxUnfollowsPerDay}}">
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="ui message">
+                  <p>
+                    The limit on how many friends can be followed or unfollowed
+                    per day. Remember, it's about smart following, not
+                    brute-force. Can be <strong>0-500</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="ui segment">
+              <div class="field">
+                <label for="refollowPeriodDay">Refollow Period in Days</label>
+                <input type="text" id="refollowPeriodDay" name="refollowPeriodDay" placeholder="5" value="{{settings.refollowPeriodDay ? settings.refollowPeriodDay : settingsDefault.refollowPeriodDay}}">
+              </div>
+
+              <div class="ui message">
+                How man days you will give followed friends to follow you back
+                before you unfollow them again.
+              </div>
+            </div>
+
+            <div class="field submit">
+              <input class="ui button" type="submit" value="Save Settings" v-on="click:onSaveSettingsClick">
+            </div>
+          </form>
+        </div>
+
+        <div class="eight wide column">
+          <h2 class="ui center aligned header">
+            <i class="tags icon disabled"></i> Search Terms
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

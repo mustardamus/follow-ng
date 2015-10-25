@@ -1,8 +1,8 @@
 module.exports = (helpers) ->
   Schema = new @Schema
-    username: String
-    password: String
-    email   : String
+    username:           String
+    password:           String
+    email:              String
   ,
     timestamps: true
 
