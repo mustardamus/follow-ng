@@ -11,6 +11,8 @@ module.exports =
       maxUnfollowsPerDay:     500
       refollowPeriodDay:      5
     settings: if @$root.$data.accounts[0] then @$root.$data.accounts[0].settings else @$data.settingsDefault
+    term    : ''
+    terms   : []
 
   ready: ->
     if @$root.$data.loggedIn and @$data.accounts.length is 0
@@ -30,6 +32,8 @@ module.exports =
         if account.id is @$data.accountId
           @$data.settings = account.settings
           break
+
+      @termsRequest()
 
     @$watch 'settings', (settings) ->
       for account in @$root.accounts
@@ -134,37 +138,52 @@ module.exports =
 
       valid
 
-    onRemoveSearchTermClick: (e) ->
-      vm       = e.targetVM
-      term     = vm.$data.term
-      parentVm = vm.$parent
-      outArr = []
-
-      for searchTerm in parentVm.$data.terms
-        outArr.push(searchTerm) if(searchTerm.term isnt term)
-
-      @removeSearchTermRequest vm.$parent.$data.screen_name, term
-      vm.$parent.$data.terms = outArr
-
-    removeSearchTermRequest: (screen_name, term) ->
+    termsRequest: ->
       $.ajax
         url:      '/terms'
-        type:     'DELETE'
+        type:     'GET'
         dataType: 'json'
-        data: { screen_name: screen_name, term: term }
+        data: { accountId: @$data.accountId }
+        success:  @onTermsSuccess
+        error:    @onTermsError
+
+    onTermsSuccess: (terms) ->
+      @$data.terms = terms
+
+    onTermsError: (res) ->
+      console.log 'error', res
 
     onSearchTermAdd: (e) ->
-      vm   = e.targetVM
-      term = $.trim(vm.$data.term)
+      return if(@$data.term.length is 0)
 
-      if term.length isnt 0
-        @addSearchTermRequest vm.$data.screen_name, term
-        vm.$data.terms.push { term: term }
-        vm.$data.term = ''
-
-    addSearchTermRequest: (screen_name, term) ->
       $.ajax
         url:      '/terms'
         type:     'POST'
         dataType: 'json'
-        data: { screen_name: screen_name, term: term }
+        data: { accountId: @$data.accountId, term: @$data.term }
+        success:  @onTermAddSuccess
+        error:    @onTermAddError
+
+      e.preventDefault()
+
+    onTermAddSuccess: ->
+      @$data.terms.push { term: @$data.term }
+      @$data.term = ''
+
+    onTermAddError: (res) ->
+      console.log 'error', res
+
+    onDeleteTermClick: (e) ->
+      $.ajax
+        url:      '/terms'
+        type:     'DELETE'
+        dataType: 'json'
+        data: { accountId: @$data.accountId, term: e.targetVM.$data.term }
+        success:  @onTermDeleteSuccess
+        error:    @onTermDeleteError
+
+    onTermDeleteSuccess: ->
+      @termsRequest() # eazy way
+
+    onTermDeleteError: (res) ->
+      console.log 'error', res
