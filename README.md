@@ -42,7 +42,7 @@ into Followback (Account follows Friend, Friend follows Account), Followers and
 Friends. Then it checks if the Friend is already in the Database, if not it
 fetches the information from Twitter and stores it in the database.
 
-### Followback Worker
+### Backfollow Worker
 
 This worker finds all friends that are following the account but the account
 does not follow them yet. It follows them and updates the field on the model.
@@ -60,6 +60,10 @@ unfollowed and the unfollowed field on the model is set to true.
 This worker will find every potential friend added by the Search Worker and
 randomly follow people. The followed field, as well as the time when the
 follow has happened, is set.
+
+### Reset Worker
+
+This worker resets the hits for following und unfollowing once a day
 
 ## Application Stack
 

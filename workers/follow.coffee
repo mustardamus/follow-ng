@@ -23,7 +23,9 @@ module.exports = class FollowWorker
 
         do (friend) =>
           funcsArr.push (cb) =>
-            @processFriend friend, cb
+            setTimeout =>
+              @processFriend friend, cb
+            , 1000 * 60 * random.integer(0, 10) # random 0-10 minutes in between follows
 
       async.series funcsArr
 

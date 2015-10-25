@@ -37,11 +37,12 @@ module.exports =
 
   workers:
     intervals: # in minutes
-      search:     15
-      update:     15
-      followback: 15
-      unfollow:   15
-      follow:     15
+      search    : 60
+      update    : 15
+      backfollow: 30
+      unfollow  : 60
+      follow    : 60
+      reset     : 60 * 24
 
   account:
     defaultSettings:

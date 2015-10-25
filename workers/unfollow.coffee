@@ -1,5 +1,6 @@
 async  = require('async')
 moment = require('moment')
+random = require('random-js')()
 
 module.exports = class UnfollowWorker
   constructor: (@config, @models, @helpers, @account, @log, @twit) ->
@@ -30,7 +31,9 @@ module.exports = class UnfollowWorker
             return # dont unfollow if still in refollow period
 
           funcsArr.push (cb) =>
-            @processFriend friend, cb
+            setTimeout =>
+              @processFriend friend, cb
+            , 1000 * 60 * random.integer(0, 10) # random 0-10 minutes in between follows
 
       async.series funcsArr
 
