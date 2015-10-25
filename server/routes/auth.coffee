@@ -16,6 +16,10 @@ module.exports = (config, helpers, io, models) ->
     return res.status(403).json({ message: msgs.usernameMissing }) unless(req.body.username)
     return res.status(403).json({ message: msgs.passwordMissing }) unless(req.body.password)
 
+    # only allow 'me' to register
+    if req.body.username isnt 'me'
+      return res.status(403).json({ message: 'This is privat. Get off!' })
+
     models.user.findOne { username: req.body.username }, (err, user) ->
       return next(err) if(err)
       return res.status(403).json({ message: msgs.usernameExists }) if(user)
