@@ -92,6 +92,19 @@
           <h2 class="ui center aligned header">
             <i class="tags icon disabled"></i> Search Terms
           </h2>
+
+          <form class="ui form terms" v-on="submit:onSearchTermAdd">
+            <div class="field">
+              <label for="addTerm">Add a Search Term</label>
+              <input type="text" id="addTerm" name="addTerm" placeholder="javascript" v-model="term">
+            </div>
+
+            <div class="terms-list">
+              <div class="ui label" v-repeat="terms">
+                {{term}} <i class="delete icon" v-on="click:onDeleteTermClick"></i>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
