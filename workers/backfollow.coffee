@@ -23,17 +23,7 @@ module.exports = class BackfollowWorker
       async.series funcsArr
 
   processFriend: (friend, cb) ->
-    if @account.hits.follows >= @account.settings.maxFollowsPerDay
-      @log 'warn', 'Limit for daily follows reached'
-      return cb(null)
-
     @twit.post 'friendships/create', { screen_name: friend.info.screen_name }, (err, data, result) =>
-      @account.update { $inc: { 'hits.follows': 1 }}, (error) =>
-        if(error)
-          @log('error', 'Updating follow hit', error)
-        else
-          @account.hits.follows++
-
       if err
         @log('error', err.message, err)
 
