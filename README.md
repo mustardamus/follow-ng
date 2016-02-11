@@ -1,4 +1,17 @@
-# smartfollow
+# Follow-ng
+
+Please note that this application is only for educational purposes! Twitter's
+[Rules](https://support.twitter.com/articles/18311) does not allow such an app
+to be used:
+
+> It is not allowed to ... repeatedly follow and unfollow people, whether to
+  build followers or to garner more attention for your profile;
+
+Well, that is exactly what this app is for. I coded it as an exercise for
+myself and to test out my
+[Yeoman Grail Generator](https://github.com/mustardamus/generator-grail). I can
+tell you right away that your app will be banned after a certain amount of time.
+So don't even bother setting it up - but learn from it.
 
 ## Resources
 
