@@ -154,7 +154,7 @@ automatically reloaded if Scripts or Styles are changing.
 ### Testing
 
 Component tests written in CoffeeScript, bundled by Browserify and run by
-[Mocha](https://visionmedia.github.io/mocha/).
+[Mocha](https://mochajs.org/).
 
 
 ## Gulp Tasks
